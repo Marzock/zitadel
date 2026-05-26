@@ -42,7 +42,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 				executer: &testExecuter{
 					executions: []execution{
 						{
-							expectedStmt: "INSERT INTO projections.lockout_policies3 (creation_date, change_date, sequence, id, state, max_password_attempts, max_otp_attempts, show_failure, is_default, resource_owner, instance_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+							expectedStmt: "INSERT INTO projections.lockout_policies3 (creation_date, change_date, sequence, id, state, max_password_attempts, max_otp_attempts, show_failure, is_default, resource_owner, instance_id, auto_unlock_after_min) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
 							expectedArgs: []interface{}{
 								anyArg{},
 								anyArg{},
@@ -55,6 +55,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 								false,
 								"ro-id",
 								"instance-id",
+								uint64(0),
 							},
 						},
 					},
@@ -171,7 +172,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 				executer: &testExecuter{
 					executions: []execution{
 						{
-							expectedStmt: "INSERT INTO projections.lockout_policies3 (creation_date, change_date, sequence, id, state, max_password_attempts, max_otp_attempts, show_failure, is_default, resource_owner, instance_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+							expectedStmt: "INSERT INTO projections.lockout_policies3 (creation_date, change_date, sequence, id, state, max_password_attempts, max_otp_attempts, show_failure, is_default, resource_owner, instance_id, auto_unlock_after_min) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
 							expectedArgs: []interface{}{
 								anyArg{},
 								anyArg{},
@@ -184,6 +185,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 								true,
 								"ro-id",
 								"instance-id",
+								uint64(0),
 							},
 						},
 					},
