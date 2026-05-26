@@ -248,7 +248,7 @@ func Setup(ctx context.Context, config *Config, steps *Steps, masterKey string) 
 	steps.s67SyncMemberRoleFields = &SyncMemberRoleFields{dbClient: dbClient}
 	steps.s68TargetAddPayloadTypeColumn = &TargetAddPayloadTypeColumn{dbClient: dbClient}
 	steps.s69CacheTablesLogged = &CacheTablesLogged{dbClient: dbClient}
-
+	steps.s70LockoutPolicyAutoUnlockColumn = &LockoutPolicyAutoUnlockColumn{dbClient: dbClient}
 	err = projection.Create(ctx, dbClient, eventstoreClient, config.Projections, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("unable to create projections: %w", err)
@@ -370,6 +370,7 @@ func Setup(ctx context.Context, config *Config, steps *Steps, masterKey string) 
 		steps.s59SetupWebkeys, // this step needs commands.
 		steps.s66SessionRecoveryCodeCheckedAt,
 		steps.s68TargetAddPayloadTypeColumn,
+		steps.s70LockoutPolicyAutoUnlockColumn,
 	} {
 		setupErr = executeMigration(ctx, eventstoreClient, step, "migration failed")
 		if setupErr != nil {
