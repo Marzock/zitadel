@@ -12,6 +12,7 @@ type LockoutPolicyWriteModel struct {
 	MaxPasswordAttempts uint64
 	MaxOTPAttempts      uint64
 	ShowLockOutFailures bool
+	AutoUnlockAfterMin  uint64
 	State               domain.PolicyState
 }
 
