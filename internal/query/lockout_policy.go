@@ -158,6 +158,7 @@ func prepareLockoutPolicyQuery() (sq.SelectBuilder, func(*sql.Row) (*LockoutPoli
 			LockoutColMaxOTPAttempts.identifier(),
 			LockoutColIsDefault.identifier(),
 			LockoutColState.identifier(),
+			LockoutColAutoUnlockAfterMin.identifier(),
 		).
 			From(lockoutTable.identifier()).
 			PlaceholderFormat(sq.Dollar),
@@ -174,6 +175,7 @@ func prepareLockoutPolicyQuery() (sq.SelectBuilder, func(*sql.Row) (*LockoutPoli
 				&policy.MaxOTPAttempts,
 				&policy.IsDefault,
 				&policy.State,
+				&policy.AutoUnlockAfterMin,
 			)
 			if err != nil {
 				if errors.Is(err, sql.ErrNoRows) {
