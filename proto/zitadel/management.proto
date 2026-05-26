@@ -11404,6 +11404,12 @@ message AddCustomLockoutPolicyRequest {
             example: "\"10\""
         }
     ];
+    uint32 auto_unlock_after_min = 3 [
+        (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+            description: "Amount of minutes after which the account will be automatically unlocked. If set to 0 the account will never be unlocked automatically."
+            example: "\"60\""
+        }
+    ];
 }
 
 message AddCustomLockoutPolicyResponse {
@@ -11420,6 +11426,12 @@ message UpdateCustomLockoutPolicyRequest {
         (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
             description: "Maximum failed attempts for a single OTP type (TOTP, SMS, Email) before the account gets locked. Attempts are reset as soon as the OTP is entered correctly. If set to 0 the account will never be locked."
             example: "\"10\""
+        }
+    ];
+    uint32 auto_unlock_after_min = 3 [
+        (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+            description: "After how many minutes a locked account should be automatically unlocked. If set to 0 the account will never be automatically unlocked."
+            example: "\"60\""
         }
     ];
 }

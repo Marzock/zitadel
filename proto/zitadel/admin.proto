@@ -8017,6 +8017,12 @@ message UpdateLockoutPolicyRequest {
             example: "\"10\""
         }
     ];
+    uint32 auto_unlock_after_min = 3 [
+        (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+            description: "Amount of minutes after which the account will be automatically unlocked. If set to 0 the account will never be unlocked automatically."
+            example: "\"60\""
+        }
+    ];
 }
 
 message UpdateLockoutPolicyResponse {
