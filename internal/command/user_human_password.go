@@ -146,6 +146,7 @@ type HumanPasswordCheckWriteModel interface {
 	GetEncodedHash() string
 	GetResourceOwner() string
 	GetWriteModel() *eventstore.WriteModel
+	GetLockedAt() time.Time
 	eventstore.QueryReducer
 }
 
