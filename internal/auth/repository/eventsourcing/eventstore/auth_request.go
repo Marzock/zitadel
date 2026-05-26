@@ -416,6 +416,7 @@ func lockoutPolicyToDomain(policy *query.LockoutPolicy) *domain.LockoutPolicy {
 		Default:             policy.IsDefault,
 		MaxPasswordAttempts: policy.MaxPasswordAttempts,
 		MaxOTPAttempts:      policy.MaxOTPAttempts,
+		AutoUnlockAfterMin:  policy.AutoUnlockAfterMin,
 		ShowLockOutFailures: policy.ShowFailures,
 	}
 }

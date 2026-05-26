@@ -111,6 +111,7 @@ func writeModelToLockoutPolicy(wm *LockoutPolicyWriteModel) *domain.LockoutPolic
 		MaxPasswordAttempts: wm.MaxPasswordAttempts,
 		MaxOTPAttempts:      wm.MaxOTPAttempts,
 		ShowLockOutFailures: wm.ShowLockOutFailures,
+		AutoUnlockAfterMin:  wm.AutoUnlockAfterMin,
 	}
 }
 

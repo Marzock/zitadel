@@ -11,6 +11,7 @@ func ModelLockoutPolicyToPb(policy *query.LockoutPolicy) *policy_pb.LockoutPolic
 		IsDefault:           policy.IsDefault,
 		MaxPasswordAttempts: policy.MaxPasswordAttempts,
 		MaxOtpAttempts:      policy.MaxOTPAttempts,
+		AutoUnlockAfterMin:  policy.AutoUnlockAfterMin,
 		Details: object.ToViewDetailsPb(
 			policy.Sequence,
 			policy.CreationDate,

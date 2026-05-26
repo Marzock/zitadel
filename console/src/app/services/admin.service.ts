@@ -1047,10 +1047,12 @@ export class AdminService {
   public updateLockoutPolicy(
     maxPasswordAttempts: number,
     maxOTPAttempts: number,
+    autoUnlockAfterMin: number,
   ): Promise<UpdateLockoutPolicyResponse.AsObject> {
     const req = new UpdateLockoutPolicyRequest();
     req.setMaxPasswordAttempts(maxPasswordAttempts);
     req.setMaxOtpAttempts(maxOTPAttempts);
+    req.setAutoUnlockAfterMin(autoUnlockAfterMin);
 
     return this.grpcService.admin.updateLockoutPolicy(req, null).then((resp) => resp.toObject());
   }

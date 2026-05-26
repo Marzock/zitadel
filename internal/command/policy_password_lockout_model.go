@@ -34,6 +34,9 @@ func (wm *LockoutPolicyWriteModel) Reduce() error {
 			if e.ShowLockOutFailures != nil {
 				wm.ShowLockOutFailures = *e.ShowLockOutFailures
 			}
+			if e.AutoUnlockAfterMin != nil {
+				wm.AutoUnlockAfterMin = *e.AutoUnlockAfterMin
+			}
 		case *policy.LockoutPolicyRemovedEvent:
 			wm.State = domain.PolicyStateRemoved
 		}

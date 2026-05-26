@@ -9,5 +9,6 @@ func UpdateLockoutPolicyToDomain(p *admin.UpdateLockoutPolicyRequest) *domain.Lo
 	return &domain.LockoutPolicy{
 		MaxPasswordAttempts: uint64(p.MaxPasswordAttempts),
 		MaxOTPAttempts:      uint64(p.MaxOtpAttempts),
+		AutoUnlockAfterMin:  uint64(p.AutoUnlockAfterMin),
 	}
 }
