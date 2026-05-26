@@ -27,6 +27,7 @@ const (
 	LockoutPolicyMaxPasswordAttemptsCol = "max_password_attempts"
 	LockoutPolicyMaxOTPAttemptsCol      = "max_otp_attempts"
 	LockoutPolicyShowLockOutFailuresCol = "show_failure"
+	LockoutPolicyAutoUnlockAfterMinCol  = "auto_unlock_after_min"
 )
 
 type lockoutPolicyProjection struct{}
@@ -53,6 +54,7 @@ func (*lockoutPolicyProjection) Init() *old_handler.Check {
 			handler.NewColumn(LockoutPolicyMaxPasswordAttemptsCol, handler.ColumnTypeInt64),
 			handler.NewColumn(LockoutPolicyMaxOTPAttemptsCol, handler.ColumnTypeInt64, handler.Default(0)),
 			handler.NewColumn(LockoutPolicyShowLockOutFailuresCol, handler.ColumnTypeBool),
+			handler.NewColumn(LockoutPolicyAutoUnlockAfterMinCol, handler.ColumnTypeInt64, handler.Default(0)),
 		},
 			handler.NewPrimaryKey(LockoutPolicyInstanceIDCol, LockoutPolicyIDCol),
 		),
@@ -129,6 +131,7 @@ func (p *lockoutPolicyProjection) reduceAdded(event eventstore.Event) (*handler.
 			handler.NewCol(LockoutPolicyIsDefaultCol, isDefault),
 			handler.NewCol(LockoutPolicyResourceOwnerCol, policyEvent.Aggregate().ResourceOwner),
 			handler.NewCol(LockoutPolicyInstanceIDCol, policyEvent.Aggregate().InstanceID),
+			handler.NewCol(LockoutPolicyAutoUnlockAfterMinCol, policyEvent.AutoUnlockAfterMin),
 		}), nil
 }
 
@@ -154,6 +157,9 @@ func (p *lockoutPolicyProjection) reduceChanged(event eventstore.Event) (*handle
 	}
 	if policyEvent.ShowLockOutFailures != nil {
 		cols = append(cols, handler.NewCol(LockoutPolicyShowLockOutFailuresCol, *policyEvent.ShowLockOutFailures))
+	}
+	if policyEvent.AutoUnlockAfterMin != nil {
+		cols = append(cols, handler.NewCol(LockoutPolicyAutoUnlockAfterMinCol, *policyEvent.AutoUnlockAfterMin))
 	}
 	return handler.NewUpdateStatement(
 		&policyEvent,

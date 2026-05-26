@@ -1027,6 +1027,7 @@ func (p *relationalTablesProjection) reduceLockoutPolicyAdded(event eventstore.E
 				MaxPasswordAttempts: &policyEvent.MaxPasswordAttempts,
 				MaxOTPAttempts:      &policyEvent.MaxOTPAttempts,
 				ShowLockOutFailures: &policyEvent.ShowLockOutFailures,
+				AutoUnlockAfterMin:  &policyEvent.AutoUnlockAfterMin,
 			},
 		}
 		return settingsRepo.Set(ctx, v3_sql.SQLTx(tx), &settings)
@@ -1064,6 +1065,7 @@ func (p *relationalTablesProjection) reduceLockoutPolicyChanged(event eventstore
 				MaxPasswordAttempts: policyEvent.MaxPasswordAttempts,
 				MaxOTPAttempts:      policyEvent.MaxOTPAttempts,
 				ShowLockOutFailures: policyEvent.ShowLockOutFailures,
+				AutoUnlockAfterMin:  policyEvent.AutoUnlockAfterMin,
 			},
 		}
 		return settingsRepo.Set(ctx, v3_sql.SQLTx(tx), &settings)
