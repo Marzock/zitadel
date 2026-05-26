@@ -28,6 +28,7 @@ type LockoutPolicy struct {
 	MaxPasswordAttempts uint64
 	MaxOTPAttempts      uint64
 	ShowFailures        bool
+	AutoUnlockAfterMin  uint64
 
 	IsDefault bool
 }
@@ -71,6 +72,10 @@ var (
 	}
 	LockoutColMaxOTPAttempts = Column{
 		name:  projection.LockoutPolicyMaxOTPAttemptsCol,
+		table: lockoutTable,
+	}
+	LockoutColAutoUnlockAfterMin = Column{
+		name:  projection.LockoutPolicyAutoUnlockAfterMinCol,
 		table: lockoutTable,
 	}
 	LockoutColIsDefault = Column{
