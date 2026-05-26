@@ -9,6 +9,7 @@ func AddLockoutPolicyToDomain(p *mgmt.AddCustomLockoutPolicyRequest) *domain.Loc
 	return &domain.LockoutPolicy{
 		MaxPasswordAttempts: uint64(p.MaxPasswordAttempts),
 		MaxOTPAttempts:      uint64(p.MaxOtpAttempts),
+		AutoUnlockAfterMin:  uint64(p.AutoUnlockAfterMin),
 	}
 }
 
@@ -16,5 +17,6 @@ func UpdateLockoutPolicyToDomain(p *mgmt.UpdateCustomLockoutPolicyRequest) *doma
 	return &domain.LockoutPolicy{
 		MaxPasswordAttempts: uint64(p.MaxPasswordAttempts),
 		MaxOTPAttempts:      uint64(p.MaxOtpAttempts),
+		AutoUnlockAfterMin:  uint64(p.AutoUnlockAfterMin),
 	}
 }
