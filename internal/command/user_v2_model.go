@@ -297,9 +297,11 @@ func (wm *UserV2WriteModel) Reduce() error {
 
 		case *user.UserLockedEvent:
 			wm.UserState = domain.UserStateLocked
+			wm.LockedAt = e.CreationDate()
 		case *user.UserUnlockedEvent:
 			wm.PasswordCheckFailedCount = 0
 			wm.UserState = domain.UserStateActive
+			wm.LockedAt = time.Time{}
 
 		case *user.UserDeactivatedEvent:
 			wm.UserState = domain.UserStateInactive
