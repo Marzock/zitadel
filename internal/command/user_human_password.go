@@ -397,6 +397,40 @@ func checkPassword(ctx context.Context, userID, password string, es *eventstore.
 	return commands, err
 }
 
+func handleLockedUserWithLockoutPolicy(ctx context.Context, wm HumanPasswordCheckWriteModel, es *eventstore.Eventstore) (adaptedWm HumanPasswordCheckWriteModel, err error) {
+	lockoutPolicy, lockoutErr := getLockoutPolicy(ctx, wm.GetResourceOwner(), es.FilterToQueryReducer)
+	logging.OnError(lockoutErr).Error("unable to get lockout policy")
+
+	if wm.GetUserState() != domain.UserStateLocked {
+		return wm, nil
+	}
+
+	if lockoutPolicy != nil && lockoutPolicy.AutoUnlockAfterMin > 0 && time.Since(wm.GetLockedAt()) >= time.Duration(lockoutPolicy.AutoUnlockAfterMin)*time.Minute {
+		switch concrete := wm.(type) {
+		case *HumanPasswordWriteModel:
+			adapted := *concrete
+			adapted.UserState = domain.UserStateActive
+			adapted.PasswordCheckFailedCount = 0
+			adapted.LockedAt = time.Time{}
+			return &adapted, nil
+		case *UserV2WriteModel:
+			adapted := *concrete
+			adapted.UserState = domain.UserStateActive
+			adapted.PasswordCheckFailedCount = 0
+			adapted.LockedAt = time.Time{}
+			return &adapted, nil
+		default:
+			return wm, nil
+		}
+	} else {
+		wrongPasswordError := &commandErrors.WrongPasswordError{
+			FailedAttempts: int32(wm.GetPasswordCheckFailedCount()),
+		}
+		return wm, zerrors.ThrowPreconditionFailed(wrongPasswordError, "COMMAND-JLK35", "Errors.User.Locked")
+
+	}
+}
+
 func verifyPasswordWithLockoutPolicy(
 	ctx context.Context,
 	wm HumanPasswordCheckWriteModel,
@@ -409,11 +443,15 @@ func verifyPasswordWithLockoutPolicy(
 	if !wm.GetUserState().Exists() {
 		return nil, "", zerrors.ThrowPreconditionFailed(nil, "COMMAND-3n77z", "Errors.User.NotFound")
 	}
+
+	autoUnlocked := false
 	if wm.GetUserState() == domain.UserStateLocked {
-		wrongPasswordError := &commandErrors.WrongPasswordError{
-			FailedAttempts: int32(wm.GetPasswordCheckFailedCount()),
+		adaptedWm, err := handleLockedUserWithLockoutPolicy(ctx, wm, es)
+		if err != nil {
+			return nil, "", err
 		}
-		return nil, "", zerrors.ThrowPreconditionFailed(wrongPasswordError, "COMMAND-JLK35", "Errors.User.Locked")
+		autoUnlocked = adaptedWm.GetUserState() != domain.UserStateLocked
+		wm = adaptedWm
 	}
 	if wm.GetEncodedHash() == "" {
 		return nil, "", zerrors.ThrowPreconditionFailed(nil, "COMMAND-3nJ4t", "Errors.User.Password.NotSet")
@@ -424,7 +462,10 @@ func verifyPasswordWithLockoutPolicy(
 	updated, err := verify(wm.GetEncodedHash(), password)
 	spanPasswordComparison.EndWithError(err)
 	err = convertLoginPasswapErr(wm.GetPasswordCheckFailedCount()+1, err)
-	commands := make([]eventstore.Command, 0, 2)
+	commands := make([]eventstore.Command, 0, 3)
+	if autoUnlocked {
+		commands = append(commands, user.NewUserUnlockedEvent(ctx, userAgg))
+	}
 
 	// recheck for additional events (failed password checks or locks)
 	recheckErr := es.FilterToQueryReducer(ctx, wm)
