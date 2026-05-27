@@ -178,6 +178,7 @@ func lockoutSettingsToPb(current *query.LockoutPolicy) *settings.LockoutSettings
 		MaxPasswordAttempts: current.MaxPasswordAttempts,
 		MaxOtpAttempts:      current.MaxOTPAttempts,
 		ResourceOwnerType:   isDefaultToResourceOwnerTypePb(current.IsDefault),
+		AutoUnlockAfterMin:  current.AutoUnlockAfterMin,
 	}
 }
 

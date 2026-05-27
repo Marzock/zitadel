@@ -22,7 +22,8 @@ var (
 		` projections.lockout_policies3.max_password_attempts,` +
 		` projections.lockout_policies3.max_otp_attempts,` +
 		` projections.lockout_policies3.is_default,` +
-		` projections.lockout_policies3.state` +
+		` projections.lockout_policies3.state,` +
+		` projections.lockout_policies3.auto_unlock_after_min` +
 		` FROM projections.lockout_policies3`
 
 	prepareLockoutPolicyCols = []string{
@@ -36,6 +37,7 @@ var (
 		"max_otp_attempts",
 		"is_default",
 		"state",
+		"auto_unlock_after_min",
 	}
 )
 
@@ -86,6 +88,7 @@ func Test_LockoutPolicyPrepares(t *testing.T) {
 						20,
 						true,
 						domain.PolicyStateActive,
+						20,
 					},
 				),
 			},
@@ -100,6 +103,7 @@ func Test_LockoutPolicyPrepares(t *testing.T) {
 				MaxPasswordAttempts: 20,
 				MaxOTPAttempts:      20,
 				IsDefault:           true,
+				AutoUnlockAfterMin:  20,
 			},
 		},
 		{

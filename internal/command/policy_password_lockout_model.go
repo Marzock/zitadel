@@ -23,6 +23,7 @@ func (wm *LockoutPolicyWriteModel) Reduce() error {
 			wm.MaxPasswordAttempts = e.MaxPasswordAttempts
 			wm.MaxOTPAttempts = e.MaxOTPAttempts
 			wm.ShowLockOutFailures = e.ShowLockOutFailures
+			wm.AutoUnlockAfterMin = e.AutoUnlockAfterMin
 			wm.State = domain.PolicyStateActive
 		case *policy.LockoutPolicyChangedEvent:
 			if e.MaxPasswordAttempts != nil {

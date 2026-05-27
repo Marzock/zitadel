@@ -3720,6 +3720,7 @@ func TestCommandSide_ChangeUserHuman(t *testing.T) {
 								0,
 								0,
 								false,
+								0,
 							),
 						),
 					),

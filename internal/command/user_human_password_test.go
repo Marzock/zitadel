@@ -993,6 +993,7 @@ func TestCommandSide_ChangePassword(t *testing.T) {
 							0,
 							0,
 							false,
+							0,
 						),
 					),
 				),
@@ -1056,6 +1057,7 @@ func TestCommandSide_ChangePassword(t *testing.T) {
 							1,
 							0,
 							false,
+							0,
 						),
 					),
 				),
@@ -1901,6 +1903,8 @@ func TestCommandSide_CheckPassword(t *testing.T) {
 							),
 						),
 					),
+					expectFilter(), // org lockout policy for auto-unlock check
+					expectFilter(), // instance lockout policy fallback
 				),
 				userPasswordHasher: mockPasswordHasher("x"),
 				tarpit:             expectTarpit(0),
@@ -1914,6 +1918,102 @@ func TestCommandSide_CheckPassword(t *testing.T) {
 			res: res{
 				err: zerrors.IsPreconditionFailed,
 			},
+		},
+		{
+			name: "user locked, auto unlock after min, ok",
+			fields: fields{
+				eventstore: expectEventstore(
+					expectFilter(
+						eventFromEventPusher(
+							org.NewLoginPolicyAddedEvent(context.Background(),
+								&org.NewAggregate("org1").Aggregate,
+								true,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								domain.PasswordlessTypeNotAllowed,
+								"",
+								time.Hour*1,
+								time.Hour*2,
+								time.Hour*3,
+								time.Hour*4,
+								time.Hour*5,
+							),
+						),
+					),
+					expectFilter(
+						eventFromEventPusher(
+							user.NewHumanAddedEvent(context.Background(),
+								&user.NewAggregate("user1", "org1").Aggregate,
+								"username",
+								"firstname",
+								"lastname",
+								"nickname",
+								"displayname",
+								language.German,
+								domain.GenderUnspecified,
+								"email@test.ch",
+								true,
+							),
+						),
+						eventFromEventPusher(
+							user.NewHumanEmailVerifiedEvent(context.Background(),
+								&user.NewAggregate("user1", "org1").Aggregate,
+							),
+						),
+						eventFromEventPusher(
+							user.NewHumanPasswordChangedEvent(context.Background(),
+								&user.NewAggregate("user1", "org1").Aggregate,
+								"$plain$x$password",
+								false,
+								""),
+						),
+						// Lock event with zero creation date (far in the past) so auto-unlock triggers.
+						eventFromEventPusher(
+							user.NewUserLockedEvent(context.Background(),
+								&user.NewAggregate("user1", "org1").Aggregate,
+							),
+						),
+					),
+					// Org lockout policy with AutoUnlockAfterMin=1; state active - no instance fallback.
+					expectFilter(
+						eventFromEventPusher(
+							org.NewLockoutPolicyAddedEvent(context.Background(),
+								&org.NewAggregate("org1").Aggregate,
+								5,
+								0,
+								false,
+								1, // autoUnlockAfterMin=1; lock happened years ago - condition met
+							),
+						),
+					),
+					expectFilter(), // recheck for concurrent locking events - none
+					expectPush(
+						user.NewUserUnlockedEvent(context.Background(),
+							&user.NewAggregate("user1", "org1").Aggregate,
+						),
+						user.NewHumanPasswordCheckSucceededEvent(context.Background(),
+							&user.NewAggregate("user1", "org1").Aggregate,
+							nil,
+						),
+					),
+				),
+				userPasswordHasher: mockPasswordHasher("x"),
+				tarpit:             expectTarpit(0),
+			},
+			args: args{
+				ctx:           context.Background(),
+				userID:        "user1",
+				resourceOwner: "org1",
+				password:      "password",
+			},
+			res: res{},
 		},
 		{
 			name: "existing password empty, precondition error",
@@ -2033,7 +2133,7 @@ func TestCommandSide_CheckPassword(t *testing.T) {
 						eventFromEventPusher(
 							org.NewLockoutPolicyAddedEvent(context.Background(),
 								&org.NewAggregate("org1").Aggregate,
-								0, 0, false,
+								0, 0, false, 0,
 							)),
 					),
 					expectPush(
@@ -2123,7 +2223,7 @@ func TestCommandSide_CheckPassword(t *testing.T) {
 						eventFromEventPusher(
 							org.NewLockoutPolicyAddedEvent(context.Background(),
 								&org.NewAggregate("org1").Aggregate,
-								0, 0, false,
+								0, 0, false, 0,
 							)),
 					),
 					expectPush(
@@ -2214,7 +2314,7 @@ func TestCommandSide_CheckPassword(t *testing.T) {
 						eventFromEventPusher(
 							org.NewLockoutPolicyAddedEvent(context.Background(),
 								&org.NewAggregate("org1").Aggregate,
-								1, 1, false,
+								1, 1, false, 1,
 							)),
 					),
 					expectPush(

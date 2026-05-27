@@ -24,6 +24,7 @@ func TestCommandSide_AddDefaultLockoutPolicy(t *testing.T) {
 		maxPasswordAttempts uint64
 		maxOTPAttempts      uint64
 		showLockOutFailures bool
+		autoUnlockAfterMin  uint64
 	}
 	type res struct {
 		want *domain.ObjectDetails
@@ -47,6 +48,7 @@ func TestCommandSide_AddDefaultLockoutPolicy(t *testing.T) {
 								10,
 								10,
 								true,
+								10,
 							),
 						),
 					),
@@ -73,6 +75,7 @@ func TestCommandSide_AddDefaultLockoutPolicy(t *testing.T) {
 							10,
 							10,
 							true,
+							10,
 						),
 					),
 				),
@@ -82,6 +85,7 @@ func TestCommandSide_AddDefaultLockoutPolicy(t *testing.T) {
 				maxPasswordAttempts: 10,
 				maxOTPAttempts:      10,
 				showLockOutFailures: true,
+				autoUnlockAfterMin:  10,
 			},
 			res: res{
 				want: &domain.ObjectDetails{
@@ -95,7 +99,7 @@ func TestCommandSide_AddDefaultLockoutPolicy(t *testing.T) {
 			r := &Commands{
 				eventstore: tt.fields.eventstore,
 			}
-			got, err := r.AddDefaultLockoutPolicy(tt.args.ctx, tt.args.maxPasswordAttempts, tt.args.maxOTPAttempts, tt.args.showLockOutFailures)
+			got, err := r.AddDefaultLockoutPolicy(tt.args.ctx, tt.args.maxPasswordAttempts, tt.args.maxOTPAttempts, tt.args.showLockOutFailures, tt.args.autoUnlockAfterMin)
 			if tt.res.err == nil {
 				assert.NoError(t, err)
 			}
@@ -141,6 +145,7 @@ func TestCommandSide_ChangeDefaultLockoutPolicy(t *testing.T) {
 					MaxPasswordAttempts: 10,
 					MaxOTPAttempts:      10,
 					ShowLockOutFailures: true,
+					AutoUnlockAfterMin:  10,
 				},
 			},
 			res: res{
@@ -159,6 +164,7 @@ func TestCommandSide_ChangeDefaultLockoutPolicy(t *testing.T) {
 								10,
 								10,
 								true,
+								10,
 							),
 						),
 					),
@@ -170,6 +176,7 @@ func TestCommandSide_ChangeDefaultLockoutPolicy(t *testing.T) {
 					MaxPasswordAttempts: 10,
 					MaxOTPAttempts:      10,
 					ShowLockOutFailures: true,
+					AutoUnlockAfterMin:  10,
 				},
 			},
 			res: res{
@@ -188,11 +195,12 @@ func TestCommandSide_ChangeDefaultLockoutPolicy(t *testing.T) {
 								10,
 								10,
 								true,
+								10,
 							),
 						),
 					),
 					expectPush(
-						newDefaultLockoutPolicyChangedEvent(context.Background(), 20, 20, false),
+						newDefaultLockoutPolicyChangedEvent(context.Background(), 20, 20, false, 20),
 					),
 				),
 			},
@@ -202,6 +210,7 @@ func TestCommandSide_ChangeDefaultLockoutPolicy(t *testing.T) {
 					MaxPasswordAttempts: 20,
 					MaxOTPAttempts:      20,
 					ShowLockOutFailures: false,
+					AutoUnlockAfterMin:  20,
 				},
 			},
 			res: res{
@@ -214,6 +223,7 @@ func TestCommandSide_ChangeDefaultLockoutPolicy(t *testing.T) {
 					MaxPasswordAttempts: 20,
 					MaxOTPAttempts:      20,
 					ShowLockOutFailures: false,
+					AutoUnlockAfterMin:  20,
 				},
 			},
 		},
@@ -237,13 +247,14 @@ func TestCommandSide_ChangeDefaultLockoutPolicy(t *testing.T) {
 	}
 }
 
-func newDefaultLockoutPolicyChangedEvent(ctx context.Context, maxPasswordAttempts, maxOTPAttempts uint64, showLockoutFailure bool) *instance.LockoutPolicyChangedEvent {
+func newDefaultLockoutPolicyChangedEvent(ctx context.Context, maxPasswordAttempts, maxOTPAttempts uint64, showLockoutFailure bool, autoUnlockAftermin uint64) *instance.LockoutPolicyChangedEvent {
 	event, _ := instance.NewLockoutPolicyChangedEvent(ctx,
 		&instance.NewAggregate("INSTANCE").Aggregate,
 		[]policy.LockoutPolicyChanges{
 			policy.ChangeMaxPasswordAttempts(maxPasswordAttempts),
 			policy.ChangeMaxOTPAttempts(maxOTPAttempts),
 			policy.ChangeShowLockOutFailures(showLockoutFailure),
+			policy.ChangeAutoUnlockAfterMin(autoUnlockAftermin),
 		},
 	)
 	return event

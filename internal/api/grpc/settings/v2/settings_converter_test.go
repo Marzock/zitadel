@@ -379,11 +379,13 @@ func Test_lockoutSettingsToPb(t *testing.T) {
 		MaxPasswordAttempts: 22,
 		MaxOTPAttempts:      22,
 		IsDefault:           true,
+		AutoUnlockAfterMin:  22,
 	}
 	want := &settings.LockoutSettings{
 		MaxPasswordAttempts: 22,
 		MaxOtpAttempts:      22,
 		ResourceOwnerType:   settings.ResourceOwnerType_RESOURCE_OWNER_TYPE_INSTANCE,
+		AutoUnlockAfterMin:  22,
 	}
 	got := lockoutSettingsToPb(arg)
 	grpc.AllFieldsSet(t, got.ProtoReflect(), ignoreTypes...)
