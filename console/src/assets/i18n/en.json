@@ -1899,6 +1899,7 @@
       "HASUPPERCASE": "must include an uppercase letter",
       "SHOWLOCKOUTFAILURES": "show lockout failures",
       "MAXPASSWORDATTEMPTS": "Password maximum attempts",
+      "AUTOUNLOCKAFTERMIN": "Auto unlock after (minutes)",
       "MAXOTPATTEMPTS": "OTP maximum attempts",
       "EXPIREWARNDAYS": "Expiration Warning after days",
       "MAXAGEDAYS": "Maximum validity in days",
