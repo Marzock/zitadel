@@ -215,7 +215,7 @@ func instancePoliciesEvents(ctx context.Context, instanceID string) []eventstore
 		instance.NewLoginPolicyMultiFactorAddedEvent(ctx, &instanceAgg.Aggregate, domain.MultiFactorTypeU2FWithPIN),
 		instance.NewPrivacyPolicyAddedEvent(ctx, &instanceAgg.Aggregate, "", "", "", "", "", "", ""),
 		instance.NewNotificationPolicyAddedEvent(ctx, &instanceAgg.Aggregate, true),
-		instance.NewLockoutPolicyAddedEvent(ctx, &instanceAgg.Aggregate, 0, 0, true, 0),
+		instance.NewLockoutPolicyAddedEvent(ctx, &instanceAgg.Aggregate, 0, 0, true, 0, false),
 		instance.NewLabelPolicyAddedEvent(ctx, &instanceAgg.Aggregate, "#5469d4", "#fafafa", "#cd3d56", "#000000", "#2073c4", "#111827", "#ff3b5b", "#ffffff", false, false, false, domain.LabelPolicyThemeAuto),
 		instance.NewLabelPolicyActivatedEvent(ctx, &instanceAgg.Aggregate),
 	}
@@ -289,7 +289,8 @@ func instanceSetupPoliciesConfig() *InstanceSetup {
 			MaxOTPAttempts           uint64
 			ShouldShowLockoutFailure bool
 			AutoUnlockAfterMin       uint64
-		}{0, 0, true, 0},
+			ShowRemainingLockoutTime bool
+		}{0, 0, true, 0, false},
 	}
 }
 

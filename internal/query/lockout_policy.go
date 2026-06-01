@@ -25,10 +25,11 @@ type LockoutPolicy struct {
 	ResourceOwner string
 	State         domain.PolicyState
 
-	MaxPasswordAttempts uint64
-	MaxOTPAttempts      uint64
-	ShowFailures        bool
-	AutoUnlockAfterMin  uint64
+	MaxPasswordAttempts      uint64
+	MaxOTPAttempts           uint64
+	ShowFailures             bool
+	AutoUnlockAfterMin       uint64
+	ShowRemainingLockoutTime bool
 
 	IsDefault bool
 }
@@ -76,6 +77,10 @@ var (
 	}
 	LockoutColAutoUnlockAfterMin = Column{
 		name:  projection.LockoutPolicyAutoUnlockAfterMinCol,
+		table: lockoutTable,
+	}
+	LockoutColShowRemainingLockoutTime = Column{
+		name:  projection.LockoutPolicyShowRemainingLockoutTimeCol,
 		table: lockoutTable,
 	}
 	LockoutColIsDefault = Column{
@@ -159,6 +164,7 @@ func prepareLockoutPolicyQuery() (sq.SelectBuilder, func(*sql.Row) (*LockoutPoli
 			LockoutColIsDefault.identifier(),
 			LockoutColState.identifier(),
 			LockoutColAutoUnlockAfterMin.identifier(),
+			LockoutColShowRemainingLockoutTime.identifier(),
 		).
 			From(lockoutTable.identifier()).
 			PlaceholderFormat(sq.Dollar),
@@ -176,6 +182,7 @@ func prepareLockoutPolicyQuery() (sq.SelectBuilder, func(*sql.Row) (*LockoutPoli
 				&policy.IsDefault,
 				&policy.State,
 				&policy.AutoUnlockAfterMin,
+				&policy.ShowRemainingLockoutTime,
 			)
 			if err != nil {
 				if errors.Is(err, sql.ErrNoRows) {

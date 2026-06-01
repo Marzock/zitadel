@@ -23,7 +23,8 @@ var (
 		` projections.lockout_policies3.max_otp_attempts,` +
 		` projections.lockout_policies3.is_default,` +
 		` projections.lockout_policies3.state,` +
-		` projections.lockout_policies3.auto_unlock_after_min` +
+		` projections.lockout_policies3.auto_unlock_after_min,` +
+		` projections.lockout_policies3.show_remaining_lockout_time` +
 		` FROM projections.lockout_policies3`
 
 	prepareLockoutPolicyCols = []string{
@@ -38,6 +39,7 @@ var (
 		"is_default",
 		"state",
 		"auto_unlock_after_min",
+		"show_remaining_lockout_time",
 	}
 )
 
@@ -89,21 +91,23 @@ func Test_LockoutPolicyPrepares(t *testing.T) {
 						true,
 						domain.PolicyStateActive,
 						20,
+						true,
 					},
 				),
 			},
 			object: &LockoutPolicy{
-				ID:                  "pol-id",
-				CreationDate:        testNow,
-				ChangeDate:          testNow,
-				Sequence:            20211109,
-				ResourceOwner:       "ro",
-				State:               domain.PolicyStateActive,
-				ShowFailures:        true,
-				MaxPasswordAttempts: 20,
-				MaxOTPAttempts:      20,
-				IsDefault:           true,
-				AutoUnlockAfterMin:  20,
+				ID:                       "pol-id",
+				CreationDate:             testNow,
+				ChangeDate:               testNow,
+				Sequence:                 20211109,
+				ResourceOwner:            "ro",
+				State:                    domain.PolicyStateActive,
+				ShowFailures:             true,
+				MaxPasswordAttempts:      20,
+				MaxOTPAttempts:           20,
+				IsDefault:                true,
+				AutoUnlockAfterMin:       20,
+				ShowRemainingLockoutTime: true,
 			},
 		},
 		{

@@ -35,4 +35,10 @@ message LockoutSettings {
       example: "\"60\""
     }
   ];
+  bool show_remaining_lockout_time = 5 [
+      (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "Defines if the remaining lockout time should be shown to the user on the login screen after the account got locked."
+        example: "\"true\""
+      }
+  ];
 }

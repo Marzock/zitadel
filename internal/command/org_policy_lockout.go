@@ -33,6 +33,7 @@ func (c *Commands) AddLockoutPolicy(ctx context.Context, resourceOwner string, p
 		policy.MaxOTPAttempts,
 		policy.ShowLockOutFailures,
 		policy.AutoUnlockAfterMin,
+		policy.ShowRemainingLockoutTime,
 	))
 	if err != nil {
 		return nil, err
@@ -57,7 +58,7 @@ func (c *Commands) ChangeLockoutPolicy(ctx context.Context, resourceOwner string
 	}
 
 	orgAgg := OrgAggregateFromWriteModel(&existingPolicy.LockoutPolicyWriteModel.WriteModel)
-	changedEvent, hasChanged := existingPolicy.NewChangedEvent(ctx, orgAgg, policy.MaxPasswordAttempts, policy.MaxOTPAttempts, policy.ShowLockOutFailures, policy.AutoUnlockAfterMin)
+	changedEvent, hasChanged := existingPolicy.NewChangedEvent(ctx, orgAgg, policy.MaxPasswordAttempts, policy.MaxOTPAttempts, policy.ShowLockOutFailures, policy.AutoUnlockAfterMin, policy.ShowRemainingLockoutTime)
 	if !hasChanged {
 		return nil, zerrors.ThrowPreconditionFailed(nil, "ORG-0JFSr", "Errors.Org.LockoutPolicy.NotChanged")
 	}

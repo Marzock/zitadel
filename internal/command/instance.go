@@ -118,6 +118,7 @@ type InstanceSetup struct {
 		MaxOTPAttempts           uint64
 		ShouldShowLockoutFailure bool
 		AutoUnlockAfterMin       uint64
+		ShowRemainingLockoutTime bool
 	}
 	EmailTemplate          []byte
 	MessageTexts           []*domain.CustomMessageText
@@ -377,7 +378,7 @@ func setupInstanceElements(instanceAgg *instance.Aggregate, setup *InstanceSetup
 
 		prepareAddDefaultPrivacyPolicy(instanceAgg, setup.PrivacyPolicy.TOSLink, setup.PrivacyPolicy.PrivacyLink, setup.PrivacyPolicy.HelpLink, setup.PrivacyPolicy.SupportEmail, setup.PrivacyPolicy.DocsLink, setup.PrivacyPolicy.CustomLink, setup.PrivacyPolicy.CustomLinkText),
 		prepareAddDefaultNotificationPolicy(instanceAgg, setup.NotificationPolicy.PasswordChange),
-		prepareAddDefaultLockoutPolicy(instanceAgg, setup.LockoutPolicy.MaxPasswordAttempts, setup.LockoutPolicy.MaxOTPAttempts, setup.LockoutPolicy.ShouldShowLockoutFailure, setup.LockoutPolicy.AutoUnlockAfterMin),
+		prepareAddDefaultLockoutPolicy(instanceAgg, setup.LockoutPolicy.MaxPasswordAttempts, setup.LockoutPolicy.MaxOTPAttempts, setup.LockoutPolicy.ShouldShowLockoutFailure, setup.LockoutPolicy.AutoUnlockAfterMin, setup.LockoutPolicy.ShowRemainingLockoutTime),
 
 		prepareAddDefaultLabelPolicy(
 			instanceAgg,

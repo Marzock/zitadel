@@ -994,6 +994,7 @@ func TestCommandSide_ChangePassword(t *testing.T) {
 							0,
 							false,
 							0,
+							false,
 						),
 					),
 				),
@@ -1058,6 +1059,7 @@ func TestCommandSide_ChangePassword(t *testing.T) {
 							0,
 							false,
 							0,
+							false,
 						),
 					),
 				),
@@ -1990,6 +1992,7 @@ func TestCommandSide_CheckPassword(t *testing.T) {
 								0,
 								false,
 								1, // autoUnlockAfterMin=1; lock happened years ago - condition met
+								false,
 							),
 						),
 					),
@@ -2133,7 +2136,7 @@ func TestCommandSide_CheckPassword(t *testing.T) {
 						eventFromEventPusher(
 							org.NewLockoutPolicyAddedEvent(context.Background(),
 								&org.NewAggregate("org1").Aggregate,
-								0, 0, false, 0,
+								0, 0, false, 0, false,
 							)),
 					),
 					expectPush(
@@ -2223,7 +2226,7 @@ func TestCommandSide_CheckPassword(t *testing.T) {
 						eventFromEventPusher(
 							org.NewLockoutPolicyAddedEvent(context.Background(),
 								&org.NewAggregate("org1").Aggregate,
-								0, 0, false, 0,
+								0, 0, false, 0, false,
 							)),
 					),
 					expectPush(
@@ -2314,7 +2317,7 @@ func TestCommandSide_CheckPassword(t *testing.T) {
 						eventFromEventPusher(
 							org.NewLockoutPolicyAddedEvent(context.Background(),
 								&org.NewAggregate("org1").Aggregate,
-								1, 1, false, 1,
+								1, 1, false, 1, false,
 							)),
 					),
 					expectPush(

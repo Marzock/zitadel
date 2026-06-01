@@ -888,6 +888,9 @@ func (s lockoutSettings) SetSettingFields(value domain.LockoutSettingsAttributes
 	if value.AutoUnlockAfterMin != nil {
 		changes = append(changes, s.SetAutoUnlockAfterMin(*value.AutoUnlockAfterMin))
 	}
+	if value.ShowRemainingLockoutTime != nil {
+		changes = append(changes, s.SetShowRemainingLockoutTime(*value.ShowRemainingLockoutTime))
+	}
 	return db_json.NewJsonChanges(s.SettingsColumn(), changes...)
 }
 
@@ -905,6 +908,10 @@ func (lockoutSettings) SetShowLockOutFailures(value bool) db_json.JsonUpdate {
 
 func (lockoutSettings) SetAutoUnlockAfterMin(value uint64) db_json.JsonUpdate {
 	return db_json.NewFieldChange([]string{"autoUnlockAfterMin"}, value)
+}
+
+func (lockoutSettings) SetShowRemainingLockoutTime(value bool) db_json.JsonUpdate {
+	return db_json.NewFieldChange([]string{"showRemainingLockoutTime"}, value)
 }
 
 func LockoutSettingsRepository() domain.LockoutSettingsRepository {

@@ -9,11 +9,12 @@ import (
 type LockoutPolicyWriteModel struct {
 	eventstore.WriteModel
 
-	MaxPasswordAttempts uint64
-	MaxOTPAttempts      uint64
-	ShowLockOutFailures bool
-	AutoUnlockAfterMin  uint64
-	State               domain.PolicyState
+	MaxPasswordAttempts      uint64
+	MaxOTPAttempts           uint64
+	ShowLockOutFailures      bool
+	AutoUnlockAfterMin       uint64
+	ShowRemainingLockoutTime bool
+	State                    domain.PolicyState
 }
 
 func (wm *LockoutPolicyWriteModel) Reduce() error {
@@ -24,6 +25,7 @@ func (wm *LockoutPolicyWriteModel) Reduce() error {
 			wm.MaxOTPAttempts = e.MaxOTPAttempts
 			wm.ShowLockOutFailures = e.ShowLockOutFailures
 			wm.AutoUnlockAfterMin = e.AutoUnlockAfterMin
+			wm.ShowRemainingLockoutTime = e.ShowRemainingLockoutTime
 			wm.State = domain.PolicyStateActive
 		case *policy.LockoutPolicyChangedEvent:
 			if e.MaxPasswordAttempts != nil {
@@ -37,6 +39,9 @@ func (wm *LockoutPolicyWriteModel) Reduce() error {
 			}
 			if e.AutoUnlockAfterMin != nil {
 				wm.AutoUnlockAfterMin = *e.AutoUnlockAfterMin
+			}
+			if e.ShowRemainingLockoutTime != nil {
+				wm.ShowRemainingLockoutTime = *e.ShowRemainingLockoutTime
 			}
 		case *policy.LockoutPolicyRemovedEvent:
 			wm.State = domain.PolicyStateRemoved

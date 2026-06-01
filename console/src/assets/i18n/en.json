@@ -1900,6 +1900,7 @@
       "SHOWLOCKOUTFAILURES": "show lockout failures",
       "MAXPASSWORDATTEMPTS": "Password maximum attempts",
       "AUTOUNLOCKAFTERMIN": "Auto unlock after (minutes)",
+      "SHOWREMAININGLOCKOUTTIME": "Show remaining lockout time",
       "MAXOTPATTEMPTS": "OTP maximum attempts",
       "EXPIREWARNDAYS": "Expiration Warning after days",
       "MAXAGEDAYS": "Maximum validity in days",

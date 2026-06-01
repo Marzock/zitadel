@@ -175,10 +175,11 @@ func legalAndSupportSettingsToPb(current *query.PrivacyPolicy) *settings.LegalAn
 
 func lockoutSettingsToPb(current *query.LockoutPolicy) *settings.LockoutSettings {
 	return &settings.LockoutSettings{
-		MaxPasswordAttempts: current.MaxPasswordAttempts,
-		MaxOtpAttempts:      current.MaxOTPAttempts,
-		ResourceOwnerType:   isDefaultToResourceOwnerTypePb(current.IsDefault),
-		AutoUnlockAfterMin:  current.AutoUnlockAfterMin,
+		MaxPasswordAttempts:      current.MaxPasswordAttempts,
+		MaxOtpAttempts:           current.MaxOTPAttempts,
+		ResourceOwnerType:        isDefaultToResourceOwnerTypePb(current.IsDefault),
+		AutoUnlockAfterMin:       current.AutoUnlockAfterMin,
+		ShowRemainingLockoutTime: current.ShowRemainingLockoutTime,
 	}
 }
 

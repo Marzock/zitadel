@@ -107,11 +107,12 @@ func writeModelToPasswordComplexityPolicy(wm *PasswordComplexityPolicyWriteModel
 
 func writeModelToLockoutPolicy(wm *LockoutPolicyWriteModel) *domain.LockoutPolicy {
 	return &domain.LockoutPolicy{
-		ObjectRoot:          writeModelToObjectRoot(wm.WriteModel),
-		MaxPasswordAttempts: wm.MaxPasswordAttempts,
-		MaxOTPAttempts:      wm.MaxOTPAttempts,
-		ShowLockOutFailures: wm.ShowLockOutFailures,
-		AutoUnlockAfterMin:  wm.AutoUnlockAfterMin,
+		ObjectRoot:               writeModelToObjectRoot(wm.WriteModel),
+		MaxPasswordAttempts:      wm.MaxPasswordAttempts,
+		MaxOTPAttempts:           wm.MaxOTPAttempts,
+		ShowLockOutFailures:      wm.ShowLockOutFailures,
+		AutoUnlockAfterMin:       wm.AutoUnlockAfterMin,
+		ShowRemainingLockoutTime: wm.ShowRemainingLockoutTime,
 	}
 }
 

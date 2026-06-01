@@ -16,18 +16,19 @@ import (
 const (
 	LockoutPolicyTable = "projections.lockout_policies3"
 
-	LockoutPolicyIDCol                  = "id"
-	LockoutPolicyCreationDateCol        = "creation_date"
-	LockoutPolicyChangeDateCol          = "change_date"
-	LockoutPolicySequenceCol            = "sequence"
-	LockoutPolicyStateCol               = "state"
-	LockoutPolicyIsDefaultCol           = "is_default"
-	LockoutPolicyResourceOwnerCol       = "resource_owner"
-	LockoutPolicyInstanceIDCol          = "instance_id"
-	LockoutPolicyMaxPasswordAttemptsCol = "max_password_attempts"
-	LockoutPolicyMaxOTPAttemptsCol      = "max_otp_attempts"
-	LockoutPolicyShowLockOutFailuresCol = "show_failure"
-	LockoutPolicyAutoUnlockAfterMinCol  = "auto_unlock_after_min"
+	LockoutPolicyIDCol                       = "id"
+	LockoutPolicyCreationDateCol             = "creation_date"
+	LockoutPolicyChangeDateCol               = "change_date"
+	LockoutPolicySequenceCol                 = "sequence"
+	LockoutPolicyStateCol                    = "state"
+	LockoutPolicyIsDefaultCol                = "is_default"
+	LockoutPolicyResourceOwnerCol            = "resource_owner"
+	LockoutPolicyInstanceIDCol               = "instance_id"
+	LockoutPolicyMaxPasswordAttemptsCol      = "max_password_attempts"
+	LockoutPolicyMaxOTPAttemptsCol           = "max_otp_attempts"
+	LockoutPolicyShowLockOutFailuresCol      = "show_failure"
+	LockoutPolicyAutoUnlockAfterMinCol       = "auto_unlock_after_min"
+	LockoutPolicyShowRemainingLockoutTimeCol = "show_remaining_lockout_time"
 )
 
 type lockoutPolicyProjection struct{}
@@ -55,6 +56,7 @@ func (*lockoutPolicyProjection) Init() *old_handler.Check {
 			handler.NewColumn(LockoutPolicyMaxOTPAttemptsCol, handler.ColumnTypeInt64, handler.Default(0)),
 			handler.NewColumn(LockoutPolicyShowLockOutFailuresCol, handler.ColumnTypeBool),
 			handler.NewColumn(LockoutPolicyAutoUnlockAfterMinCol, handler.ColumnTypeInt64, handler.Default(0)),
+			handler.NewColumn(LockoutPolicyShowRemainingLockoutTimeCol, handler.ColumnTypeBool, handler.Default(false)),
 		},
 			handler.NewPrimaryKey(LockoutPolicyInstanceIDCol, LockoutPolicyIDCol),
 		),
@@ -132,6 +134,7 @@ func (p *lockoutPolicyProjection) reduceAdded(event eventstore.Event) (*handler.
 			handler.NewCol(LockoutPolicyResourceOwnerCol, policyEvent.Aggregate().ResourceOwner),
 			handler.NewCol(LockoutPolicyInstanceIDCol, policyEvent.Aggregate().InstanceID),
 			handler.NewCol(LockoutPolicyAutoUnlockAfterMinCol, policyEvent.AutoUnlockAfterMin),
+			handler.NewCol(LockoutPolicyShowRemainingLockoutTimeCol, policyEvent.ShowRemainingLockoutTime),
 		}), nil
 }
 
@@ -160,6 +163,9 @@ func (p *lockoutPolicyProjection) reduceChanged(event eventstore.Event) (*handle
 	}
 	if policyEvent.AutoUnlockAfterMin != nil {
 		cols = append(cols, handler.NewCol(LockoutPolicyAutoUnlockAfterMinCol, *policyEvent.AutoUnlockAfterMin))
+	}
+	if policyEvent.ShowRemainingLockoutTime != nil {
+		cols = append(cols, handler.NewCol(LockoutPolicyShowRemainingLockoutTimeCol, *policyEvent.ShowRemainingLockoutTime))
 	}
 	return handler.NewUpdateStatement(
 		&policyEvent,

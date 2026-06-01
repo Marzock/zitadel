@@ -32,7 +32,8 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 						"maxPasswordAttempts": 10,
 						"maxOTPAttempts": 10,
 						"showLockOutFailures": true,
-						"autoUnlockAfterMin": 10
+						"autoUnlockAfterMin": 10,
+						"showRemainingLockoutTime": true
 }`),
 					), org.LockoutPolicyAddedEventMapper),
 			},
@@ -43,7 +44,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 				executer: &testExecuter{
 					executions: []execution{
 						{
-							expectedStmt: "INSERT INTO projections.lockout_policies3 (creation_date, change_date, sequence, id, state, max_password_attempts, max_otp_attempts, show_failure, is_default, resource_owner, instance_id, auto_unlock_after_min) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+							expectedStmt: "INSERT INTO projections.lockout_policies3 (creation_date, change_date, sequence, id, state, max_password_attempts, max_otp_attempts, show_failure, is_default, resource_owner, instance_id, auto_unlock_after_min, show_remaining_lockout_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)",
 							expectedArgs: []interface{}{
 								anyArg{},
 								anyArg{},
@@ -57,6 +58,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 								"ro-id",
 								"instance-id",
 								uint64(10),
+								true,
 							},
 						},
 					},
@@ -75,7 +77,8 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 						"maxPasswordAttempts": 10,
 						"maxOTPAttempts": 10,
 						"showLockOutFailures": true,
-						"autoUnlockAfterMin": 10
+						"autoUnlockAfterMin": 10,
+						"showRemainingLockoutTime": true
 		}`),
 					), org.LockoutPolicyChangedEventMapper),
 			},
@@ -85,7 +88,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 				executer: &testExecuter{
 					executions: []execution{
 						{
-							expectedStmt: "UPDATE projections.lockout_policies3 SET (change_date, sequence, max_password_attempts, max_otp_attempts, show_failure, auto_unlock_after_min) = ($1, $2, $3, $4, $5, $6) WHERE (id = $7) AND (instance_id = $8)",
+							expectedStmt: "UPDATE projections.lockout_policies3 SET (change_date, sequence, max_password_attempts, max_otp_attempts, show_failure, auto_unlock_after_min, show_remaining_lockout_time) = ($1, $2, $3, $4, $5, $6, $7) WHERE (id = $8) AND (instance_id = $9)",
 							expectedArgs: []interface{}{
 								anyArg{},
 								uint64(15),
@@ -93,6 +96,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 								uint64(10),
 								true,
 								uint64(10),
+								true,
 								"agg-id",
 								"instance-id",
 							},
@@ -166,7 +170,8 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 						"maxPasswordAttempts": 10,
 						"maxOTPAttempts": 10,
 						"showLockOutFailures": true,
-						"autoUnlockAfterMin": 10
+						"autoUnlockAfterMin": 10,
+						"showRemainingLockoutTime": true
 					}`),
 					), instance.LockoutPolicyAddedEventMapper),
 			},
@@ -176,7 +181,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 				executer: &testExecuter{
 					executions: []execution{
 						{
-							expectedStmt: "INSERT INTO projections.lockout_policies3 (creation_date, change_date, sequence, id, state, max_password_attempts, max_otp_attempts, show_failure, is_default, resource_owner, instance_id, auto_unlock_after_min) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+							expectedStmt: "INSERT INTO projections.lockout_policies3 (creation_date, change_date, sequence, id, state, max_password_attempts, max_otp_attempts, show_failure, is_default, resource_owner, instance_id, auto_unlock_after_min, show_remaining_lockout_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)",
 							expectedArgs: []interface{}{
 								anyArg{},
 								anyArg{},
@@ -190,6 +195,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 								"ro-id",
 								"instance-id",
 								uint64(10),
+								true,
 							},
 						},
 					},
@@ -208,7 +214,8 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 						"maxPasswordAttempts": 10,
 						"maxOTPAttempts": 10,
 						"showLockOutFailures": true,
-						"autoUnlockAfterMin": 10
+						"autoUnlockAfterMin": 10,
+						"showRemainingLockoutTime": true
 					}`),
 					), instance.LockoutPolicyChangedEventMapper),
 			},
@@ -218,7 +225,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 				executer: &testExecuter{
 					executions: []execution{
 						{
-							expectedStmt: "UPDATE projections.lockout_policies3 SET (change_date, sequence, max_password_attempts, max_otp_attempts, show_failure, auto_unlock_after_min) = ($1, $2, $3, $4, $5, $6) WHERE (id = $7) AND (instance_id = $8)",
+							expectedStmt: "UPDATE projections.lockout_policies3 SET (change_date, sequence, max_password_attempts, max_otp_attempts, show_failure, auto_unlock_after_min, show_remaining_lockout_time) = ($1, $2, $3, $4, $5, $6, $7) WHERE (id = $8) AND (instance_id = $9)",
 							expectedArgs: []interface{}{
 								anyArg{},
 								uint64(15),
@@ -226,6 +233,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 								uint64(10),
 								true,
 								uint64(10),
+								true,
 								"agg-id",
 								"instance-id",
 							},

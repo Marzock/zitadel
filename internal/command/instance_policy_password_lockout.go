@@ -12,7 +12,7 @@ import (
 	"github.com/zitadel/zitadel/internal/zerrors"
 )
 
-func (c *Commands) AddDefaultLockoutPolicy(ctx context.Context, maxPasswordAttempts, maxOTPAttempts uint64, showLockoutFailure bool, autoUnlockAfterMin uint64) (*domain.ObjectDetails, error) {
+func (c *Commands) AddDefaultLockoutPolicy(ctx context.Context, maxPasswordAttempts, maxOTPAttempts uint64, showLockoutFailure bool, autoUnlockAfterMin uint64, showRemainingLockoutTime bool) (*domain.ObjectDetails, error) {
 	instanceAgg := instance.NewAggregate(authz.GetInstance(ctx).InstanceID())
 	//nolint:staticcheck
 	cmds, err := preparation.PrepareCommands(ctx, c.eventstore.Filter, prepareAddDefaultLockoutPolicy(
@@ -21,6 +21,7 @@ func (c *Commands) AddDefaultLockoutPolicy(ctx context.Context, maxPasswordAttem
 		maxOTPAttempts,
 		showLockoutFailure,
 		autoUnlockAfterMin,
+		showRemainingLockoutTime,
 	))
 	if err != nil {
 		return nil, err
@@ -49,6 +50,7 @@ func (c *Commands) ChangeDefaultLockoutPolicy(ctx context.Context, policy *domai
 		policy.MaxOTPAttempts,
 		policy.ShowLockOutFailures,
 		policy.AutoUnlockAfterMin,
+		policy.ShowRemainingLockoutTime,
 	)
 	if !hasChanged {
 		return nil, zerrors.ThrowPreconditionFailed(nil, "INSTANCE-0psjF", "Errors.Instance.LockoutPolicy.NotChanged")
@@ -83,6 +85,7 @@ func prepareAddDefaultLockoutPolicy(
 	maxOTPAttempts uint64,
 	showLockoutFailure bool,
 	autoUnlockAfterMin uint64,
+	showRemainingLockoutTime bool,
 ) preparation.Validation {
 	return func() (preparation.CreateCommands, error) {
 		return func(ctx context.Context, filter preparation.FilterToQueryReducer) ([]eventstore.Command, error) {
@@ -99,7 +102,7 @@ func prepareAddDefaultLockoutPolicy(
 				return nil, zerrors.ThrowAlreadyExists(nil, "INSTANCE-0olDf", "Errors.Instance.LockoutPolicy.AlreadyExists")
 			}
 			return []eventstore.Command{
-				instance.NewLockoutPolicyAddedEvent(ctx, &a.Aggregate, maxPasswordAttempts, maxOTPAttempts, showLockoutFailure, autoUnlockAfterMin),
+				instance.NewLockoutPolicyAddedEvent(ctx, &a.Aggregate, maxPasswordAttempts, maxOTPAttempts, showLockoutFailure, autoUnlockAfterMin, showRemainingLockoutTime),
 			}, nil
 		}, nil
 	}
