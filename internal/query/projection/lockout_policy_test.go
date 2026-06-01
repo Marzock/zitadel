@@ -31,7 +31,8 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 						[]byte(`{
 						"maxPasswordAttempts": 10,
 						"maxOTPAttempts": 10,
-						"showLockOutFailures": true
+						"showLockOutFailures": true,
+						"autoUnlockAfterMin": 10
 }`),
 					), org.LockoutPolicyAddedEventMapper),
 			},
@@ -55,7 +56,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 								false,
 								"ro-id",
 								"instance-id",
-								uint64(0),
+								uint64(10),
 							},
 						},
 					},
@@ -73,7 +74,8 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 						[]byte(`{
 						"maxPasswordAttempts": 10,
 						"maxOTPAttempts": 10,
-						"showLockOutFailures": true
+						"showLockOutFailures": true,
+						"autoUnlockAfterMin": 10
 		}`),
 					), org.LockoutPolicyChangedEventMapper),
 			},
@@ -83,13 +85,14 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 				executer: &testExecuter{
 					executions: []execution{
 						{
-							expectedStmt: "UPDATE projections.lockout_policies3 SET (change_date, sequence, max_password_attempts, max_otp_attempts, show_failure) = ($1, $2, $3, $4, $5) WHERE (id = $6) AND (instance_id = $7)",
+							expectedStmt: "UPDATE projections.lockout_policies3 SET (change_date, sequence, max_password_attempts, max_otp_attempts, show_failure, auto_unlock_after_min) = ($1, $2, $3, $4, $5, $6) WHERE (id = $7) AND (instance_id = $8)",
 							expectedArgs: []interface{}{
 								anyArg{},
 								uint64(15),
 								uint64(10),
 								uint64(10),
 								true,
+								uint64(10),
 								"agg-id",
 								"instance-id",
 							},
@@ -162,7 +165,8 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 						[]byte(`{
 						"maxPasswordAttempts": 10,
 						"maxOTPAttempts": 10,
-						"showLockOutFailures": true
+						"showLockOutFailures": true,
+						"autoUnlockAfterMin": 10
 					}`),
 					), instance.LockoutPolicyAddedEventMapper),
 			},
@@ -185,7 +189,7 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 								true,
 								"ro-id",
 								"instance-id",
-								uint64(0),
+								uint64(10),
 							},
 						},
 					},
@@ -203,7 +207,8 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 						[]byte(`{
 						"maxPasswordAttempts": 10,
 						"maxOTPAttempts": 10,
-						"showLockOutFailures": true
+						"showLockOutFailures": true,
+						"autoUnlockAfterMin": 10
 					}`),
 					), instance.LockoutPolicyChangedEventMapper),
 			},
@@ -213,13 +218,14 @@ func TestLockoutPolicyProjection_reduces(t *testing.T) {
 				executer: &testExecuter{
 					executions: []execution{
 						{
-							expectedStmt: "UPDATE projections.lockout_policies3 SET (change_date, sequence, max_password_attempts, max_otp_attempts, show_failure) = ($1, $2, $3, $4, $5) WHERE (id = $6) AND (instance_id = $7)",
+							expectedStmt: "UPDATE projections.lockout_policies3 SET (change_date, sequence, max_password_attempts, max_otp_attempts, show_failure, auto_unlock_after_min) = ($1, $2, $3, $4, $5, $6) WHERE (id = $7) AND (instance_id = $8)",
 							expectedArgs: []interface{}{
 								anyArg{},
 								uint64(15),
 								uint64(10),
 								uint64(10),
 								true,
+								uint64(10),
 								"agg-id",
 								"instance-id",
 							},
