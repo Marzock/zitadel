@@ -2433,6 +2433,7 @@ func TestGetLockoutSettings(t *testing.T) {
 				MaxPasswordAttempts: gu.Ptr(uint64(3)),
 				MaxOTPAttempts:      gu.Ptr(uint64(3)),
 				ShowLockOutFailures: gu.Ptr(true),
+				AutoUnlockAfterMin:  gu.Ptr(uint64(3)),
 			},
 		},
 		{
@@ -2444,6 +2445,7 @@ func TestGetLockoutSettings(t *testing.T) {
 				MaxPasswordAttempts: gu.Ptr(uint64(4)),
 				MaxOTPAttempts:      gu.Ptr(uint64(4)),
 				ShowLockOutFailures: gu.Ptr(true),
+				AutoUnlockAfterMin:  gu.Ptr(uint64(4)),
 			},
 		},
 		{
@@ -2455,6 +2457,7 @@ func TestGetLockoutSettings(t *testing.T) {
 				MaxPasswordAttempts: gu.Ptr(uint64(5)),
 				MaxOTPAttempts:      gu.Ptr(uint64(5)),
 				ShowLockOutFailures: gu.Ptr(false),
+				AutoUnlockAfterMin:  gu.Ptr(uint64(5)),
 			},
 		},
 		{
@@ -2466,6 +2469,7 @@ func TestGetLockoutSettings(t *testing.T) {
 				MaxPasswordAttempts: gu.Ptr(uint64(6)),
 				MaxOTPAttempts:      gu.Ptr(uint64(6)),
 				ShowLockOutFailures: gu.Ptr(true),
+				AutoUnlockAfterMin:  gu.Ptr(uint64(6)),
 			},
 		},
 	}
@@ -2536,6 +2540,7 @@ func TestListLockoutSettings(t *testing.T) {
 				MaxPasswordAttempts: gu.Ptr(uint64(3)),
 				MaxOTPAttempts:      gu.Ptr(uint64(3)),
 				ShowLockOutFailures: gu.Ptr(true),
+				AutoUnlockAfterMin:  gu.Ptr(uint64(3)),
 			},
 		},
 		{
@@ -2547,6 +2552,7 @@ func TestListLockoutSettings(t *testing.T) {
 				MaxPasswordAttempts: gu.Ptr(uint64(4)),
 				MaxOTPAttempts:      gu.Ptr(uint64(4)),
 				ShowLockOutFailures: gu.Ptr(false),
+				AutoUnlockAfterMin:  gu.Ptr(uint64(4)),
 			},
 		},
 		{
@@ -2558,6 +2564,7 @@ func TestListLockoutSettings(t *testing.T) {
 				MaxPasswordAttempts: gu.Ptr(uint64(5)),
 				MaxOTPAttempts:      gu.Ptr(uint64(5)),
 				ShowLockOutFailures: gu.Ptr(true),
+				AutoUnlockAfterMin:  gu.Ptr(uint64(5)),
 			},
 		},
 		{
@@ -2569,6 +2576,7 @@ func TestListLockoutSettings(t *testing.T) {
 				MaxPasswordAttempts: gu.Ptr(uint64(6)),
 				MaxOTPAttempts:      gu.Ptr(uint64(6)),
 				ShowLockOutFailures: gu.Ptr(true),
+				AutoUnlockAfterMin:  gu.Ptr(uint64(6)),
 			},
 		},
 	}
@@ -2646,6 +2654,7 @@ func TestSetLockoutSettings(t *testing.T) {
 			MaxPasswordAttempts: gu.Ptr(uint64(3)),
 			MaxOTPAttempts:      gu.Ptr(uint64(3)),
 			ShowLockOutFailures: gu.Ptr(true),
+			AutoUnlockAfterMin:  gu.Ptr(uint64(3)),
 		},
 	}
 
@@ -2668,6 +2677,7 @@ func TestSetLockoutSettings(t *testing.T) {
 					MaxPasswordAttempts: gu.Ptr(uint64(4)),
 					MaxOTPAttempts:      gu.Ptr(uint64(4)),
 					ShowLockOutFailures: gu.Ptr(true),
+					AutoUnlockAfterMin:  gu.Ptr(uint64(4)),
 				},
 			},
 		},
@@ -2682,6 +2692,7 @@ func TestSetLockoutSettings(t *testing.T) {
 					MaxPasswordAttempts: gu.Ptr(uint64(5)),
 					MaxOTPAttempts:      gu.Ptr(uint64(5)),
 					ShowLockOutFailures: gu.Ptr(true),
+					AutoUnlockAfterMin:  gu.Ptr(uint64(5)),
 				},
 			},
 		},
@@ -2696,6 +2707,7 @@ func TestSetLockoutSettings(t *testing.T) {
 					MaxPasswordAttempts: gu.Ptr(uint64(3)),
 					MaxOTPAttempts:      gu.Ptr(uint64(3)),
 					ShowLockOutFailures: gu.Ptr(true),
+					AutoUnlockAfterMin:  gu.Ptr(uint64(3)),
 				},
 			},
 			wantErr: new(database.ForeignKeyError),
@@ -2711,6 +2723,7 @@ func TestSetLockoutSettings(t *testing.T) {
 					MaxPasswordAttempts: gu.Ptr(uint64(3)),
 					MaxOTPAttempts:      gu.Ptr(uint64(3)),
 					ShowLockOutFailures: gu.Ptr(true),
+					AutoUnlockAfterMin:  gu.Ptr(uint64(3)),
 				},
 			},
 			wantErr: new(database.ForeignKeyError),
@@ -2748,6 +2761,7 @@ func TestDeleteLockoutSettings(t *testing.T) {
 			MaxPasswordAttempts: gu.Ptr(uint64(3)),
 			MaxOTPAttempts:      gu.Ptr(uint64(3)),
 			ShowLockOutFailures: gu.Ptr(true),
+			AutoUnlockAfterMin:  gu.Ptr(uint64(3)),
 		},
 	}
 	err := repo.Set(t.Context(), tx, existingInstanceSettings)
@@ -2762,6 +2776,7 @@ func TestDeleteLockoutSettings(t *testing.T) {
 			MaxPasswordAttempts: gu.Ptr(uint64(4)),
 			MaxOTPAttempts:      gu.Ptr(uint64(4)),
 			ShowLockOutFailures: gu.Ptr(true),
+			AutoUnlockAfterMin:  gu.Ptr(uint64(4)),
 		},
 	}
 	err = repo.Set(t.Context(), tx, existingOrganizationSettings)

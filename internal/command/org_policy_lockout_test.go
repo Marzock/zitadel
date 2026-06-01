@@ -46,6 +46,7 @@ func TestCommandSide_AddPasswordLockoutPolicy(t *testing.T) {
 					MaxPasswordAttempts: 10,
 					MaxOTPAttempts:      10,
 					ShowLockOutFailures: true,
+					AutoUnlockAfterMin:  10,
 				},
 			},
 			res: res{
