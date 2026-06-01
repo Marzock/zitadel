@@ -501,6 +501,7 @@ func (s *Server) getLockoutPolicy(ctx context.Context, orgID string) (_ *managem
 		return &management_pb.AddCustomLockoutPolicyRequest{
 			MaxPasswordAttempts: uint32(queriedLockout.MaxPasswordAttempts),
 			MaxOtpAttempts:      uint32(queriedLockout.MaxOTPAttempts),
+			AutoUnlockAfterMin:  uint32(queriedLockout.AutoUnlockAfterMin),
 		}, nil
 	}
 	return nil, nil
