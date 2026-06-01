@@ -299,6 +299,16 @@ export async function sendPassword(
             }),
           };
         }
+
+        if( "remainingSuspensionTime" in error && error.remainingSuspensionTime) {
+          recordAuthFailure("password", "account_suspended", command.organization);
+          return {
+            error: t("errors.accountSuspended", {
+              remainingSuspensionTime: error.remainingSuspensionTime,
+            }),
+          };
+        }
+
         recordAuthFailure("password", "session_creation_failed", command.organization);
         if (loginSettingsByContext?.ignoreUnknownUsernames) {
           return { error: t("errors.failedToAuthenticateNoLimit") };

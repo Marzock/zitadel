@@ -405,22 +405,29 @@ func handleLockedUserWithLockoutPolicy(ctx context.Context, wm HumanPasswordChec
 		return wm, nil
 	}
 
-	if lockoutPolicy != nil && lockoutPolicy.AutoUnlockAfterMin > 0 && time.Since(wm.GetLockedAt()) >= time.Duration(lockoutPolicy.AutoUnlockAfterMin)*time.Minute {
-		switch concrete := wm.(type) {
-		case *HumanPasswordWriteModel:
-			adapted := *concrete
-			adapted.UserState = domain.UserStateActive
-			adapted.PasswordCheckFailedCount = 0
-			adapted.LockedAt = time.Time{}
-			return &adapted, nil
-		case *UserV2WriteModel:
-			adapted := *concrete
-			adapted.UserState = domain.UserStateActive
-			adapted.PasswordCheckFailedCount = 0
-			adapted.LockedAt = time.Time{}
-			return &adapted, nil
-		default:
-			return wm, nil
+	if lockoutPolicy != nil && lockoutPolicy.AutoUnlockAfterMin > 0 {
+		if time.Since(wm.GetLockedAt()) >= time.Duration(lockoutPolicy.AutoUnlockAfterMin)*time.Minute {
+			switch concrete := wm.(type) {
+			case *HumanPasswordWriteModel:
+				adapted := *concrete
+				adapted.UserState = domain.UserStateActive
+				adapted.PasswordCheckFailedCount = 0
+				adapted.LockedAt = time.Time{}
+				return &adapted, nil
+			case *UserV2WriteModel:
+				adapted := *concrete
+				adapted.UserState = domain.UserStateActive
+				adapted.PasswordCheckFailedCount = 0
+				adapted.LockedAt = time.Time{}
+				return &adapted, nil
+			default:
+				return wm, nil
+			}
+		} else {
+			suspensionNotExceededError := &commandErrors.SuspensionNotExceededError{
+				RemainingTime: int32(time.Until(wm.GetLockedAt().Add(time.Duration(lockoutPolicy.AutoUnlockAfterMin) * time.Minute)).Minutes()),
+			}
+			return wm, zerrors.ThrowPreconditionFailed(suspensionNotExceededError, "COMMAND-M4rp6", "Errors.User.SuspensionNotExceeded")
 		}
 	} else {
 		wrongPasswordError := &commandErrors.WrongPasswordError{

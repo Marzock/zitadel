@@ -127,6 +127,7 @@
       "failedToAuthenticate": "認証に失敗しました。パスワード試行回数 {maxPasswordAttempts} 回中 {failedAttempts} 回失敗しました。{lockoutMessage}",
       "failedToAuthenticateNoLimit": "認証に失敗しました。",
       "accountLockedContactAdmin": " アカウントのロックを解除するには管理者に連絡してください",
+      "accountSuspended": "アカウントが停止されています。停止の残り時間：{remainingSuspensionTime} 分",
       "userNotFound": "ユーザーがシステムに見つかりません",
       "initialUserNotSupported": "初期ユーザーはサポートされていません",
       "userInitialStateNotSupported": "ユーザーの初期状態はサポートされていません",

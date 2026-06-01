@@ -142,6 +142,7 @@
       "failedToAuthenticate": "Échec de l'authentification. Vous avez utilisé {failedAttempts} sur {maxPasswordAttempts} tentatives.{lockoutMessage}",
       "failedToAuthenticateNoLimit": "Échec de l'authentification.",
       "accountLockedContactAdmin": " Contactez votre administrateur pour déverrouiller votre compte",
+      "accountSuspended": "Le compte est suspendu. Temps de suspension restant : {remainingSuspensionTime} minutes",
       "userNotFound": "Utilisateur non trouvé dans le système",
       "initialUserNotSupported": "Utilisateur initial non pris en charge",
       "userInitialStateNotSupported": "État initial de l'utilisateur non pris en charge",

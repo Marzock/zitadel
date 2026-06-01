@@ -30,16 +30,24 @@ type CustomCookieData = {
   requestId?: string; // if its linked to an OIDC flow
 };
 
-const passwordAttemptsHandler = (error: ConnectError) => {
+const passwordAttemptsAndSuspensionHandler = (error: ConnectError) => {
   const details = error.findDetails(CredentialsCheckErrorSchema);
-
-  if (details[0] && "failedAttempts" in details[0]) {
+  
+  if (details[0] && "failedAttempts" in details[0] && details[0].failedAttempts > 0) {
     const failedAttempts = details[0].failedAttempts;
     throw {
       error: `Failed to authenticate: You had ${failedAttempts} password attempts.`,
       failedAttempts: failedAttempts,
     };
   }
+  if (details[0] && "remainingSuspensionTime" in details[0] && details[0].remainingSuspensionTime > 0) {
+    const remainingSuspensionTime = details[0].remainingSuspensionTime;
+    throw {
+      error: `Failed to authenticate: Your account is suspended. Remaining suspension time: ${remainingSuspensionTime} seconds.`,
+      remainingSuspensionTime: remainingSuspensionTime,
+    };
+  }
+
   throw error;
 };
 
@@ -68,7 +76,7 @@ export async function createSessionAndUpdateCookie(command: {
     checks: command.checks,
     lifetime: sessionLifetime,
     challenges: command.challenges,
-  });
+  }).catch(passwordAttemptsAndSuspensionHandler);
 
   if (createdSession) {
     return getSession({
@@ -270,5 +278,5 @@ export async function setSessionAndUpdateCookie(command: {
         throw new Error("Session could not be set");
       }
     })
-    .catch(passwordAttemptsHandler);
+    .catch(passwordAttemptsAndSuspensionHandler);
 }

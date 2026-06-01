@@ -7,3 +7,11 @@ type WrongPasswordError struct {
 func (wpe *WrongPasswordError) Error() string {
 	return ""
 }
+
+type SuspensionNotExceededError struct {
+	RemainingTime int32
+}
+
+func (sne *SuspensionNotExceededError) Error() string {
+	return ""
+}

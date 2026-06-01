@@ -142,6 +142,7 @@
       "failedToAuthenticate": "Error al autenticar. Tuvo {failedAttempts} de {maxPasswordAttempts} intentos de contraseña.{lockoutMessage}",
       "failedToAuthenticateNoLimit": "Error al autenticar.",
       "accountLockedContactAdmin": " Comuníquese con su administrador para desbloquear su cuenta",
+      "accountSuspended": "La cuenta está suspendida. Tiempo de suspensión restante: {remainingSuspensionTime} minutos",
       "userNotFound": "Usuario no encontrado en el sistema",
       "initialUserNotSupported": "Usuario inicial no compatible",
       "userInitialStateNotSupported": "El estado inicial del usuario no es compatible",
