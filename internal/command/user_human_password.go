@@ -397,37 +397,58 @@ func checkPassword(ctx context.Context, userID, password string, es *eventstore.
 	return commands, err
 }
 
-func handleLockedUserWithLockoutPolicy(ctx context.Context, wm HumanPasswordCheckWriteModel, es *eventstore.Eventstore) (adaptedWm HumanPasswordCheckWriteModel, err error) {
-	lockoutPolicy, lockoutErr := getLockoutPolicy(ctx, wm.GetResourceOwner(), es.FilterToQueryReducer)
+// evaluateLockoutPolicy checks a locked user against the lockout policy and returns whether the user
+// should be automatically unlocked. If the lock duration has not yet been exceeded, a
+// [commandErrors.LockDurationNotExceededError] (when ShowRemainingLockoutTime is set) or a generic
+// locked error is returned. Callers must emit a [user.UserUnlockedEvent] when autoUnlock is true.
+func evaluateLockoutPolicy(
+	ctx context.Context,
+	lockedAt time.Time,
+	resourceOwner string,
+	queryReducer func(ctx context.Context, r eventstore.QueryReducer) error,
+) (autoUnlock bool, err error) {
+	lockoutPolicy, lockoutErr := getLockoutPolicy(ctx, resourceOwner, queryReducer)
 	logging.OnError(lockoutErr).Error("unable to get lockout policy")
 
+	if lockoutPolicy != nil && lockoutPolicy.AutoUnlockAfterMin > 0 {
+		if time.Since(lockedAt) >= time.Duration(lockoutPolicy.AutoUnlockAfterMin)*time.Minute {
+			return true, nil
+		}
+		if lockoutPolicy.ShowRemainingLockoutTime {
+			lockDurationNotExceededError := &commandErrors.LockDurationNotExceededError{
+				RemainingTime: int32(time.Until(lockedAt.Add(time.Duration(lockoutPolicy.AutoUnlockAfterMin) * time.Minute)).Minutes()),
+			}
+			return false, zerrors.ThrowPreconditionFailed(lockDurationNotExceededError, "COMMAND-M4rp6", "Errors.User.LockDurationNotExceeded")
+		}
+	}
+	return false, nil
+}
+
+func handleLockedUserWithLockoutPolicy(ctx context.Context, wm HumanPasswordCheckWriteModel, es *eventstore.Eventstore) (adaptedWm HumanPasswordCheckWriteModel, err error) {
 	if wm.GetUserState() != domain.UserStateLocked {
 		return wm, nil
 	}
 
-	if lockoutPolicy != nil && lockoutPolicy.AutoUnlockAfterMin > 0 {
-		if time.Since(wm.GetLockedAt()) >= time.Duration(lockoutPolicy.AutoUnlockAfterMin)*time.Minute {
-			switch concrete := wm.(type) {
-			case *HumanPasswordWriteModel:
-				adapted := *concrete
-				adapted.UserState = domain.UserStateActive
-				adapted.PasswordCheckFailedCount = 0
-				adapted.LockedAt = time.Time{}
-				return &adapted, nil
-			case *UserV2WriteModel:
-				adapted := *concrete
-				adapted.UserState = domain.UserStateActive
-				adapted.PasswordCheckFailedCount = 0
-				adapted.LockedAt = time.Time{}
-				return &adapted, nil
-			default:
-				return wm, nil
-			}
-		} else if lockoutPolicy.ShowRemainingLockoutTime {
-			lockDurationNotExceededError := &commandErrors.LockDurationNotExceededError{
-				RemainingTime: int32(time.Until(wm.GetLockedAt().Add(time.Duration(lockoutPolicy.AutoUnlockAfterMin) * time.Minute)).Minutes()),
-			}
-			return wm, zerrors.ThrowPreconditionFailed(lockDurationNotExceededError, "COMMAND-M4rp6", "Errors.User.LockDurationNotExceeded")
+	autoUnlock, err := evaluateLockoutPolicy(ctx, wm.GetLockedAt(), wm.GetResourceOwner(), es.FilterToQueryReducer)
+	if err != nil {
+		return wm, err
+	}
+	if autoUnlock {
+		switch concrete := wm.(type) {
+		case *HumanPasswordWriteModel:
+			adapted := *concrete
+			adapted.UserState = domain.UserStateActive
+			adapted.PasswordCheckFailedCount = 0
+			adapted.LockedAt = time.Time{}
+			return &adapted, nil
+		case *UserV2WriteModel:
+			adapted := *concrete
+			adapted.UserState = domain.UserStateActive
+			adapted.PasswordCheckFailedCount = 0
+			adapted.LockedAt = time.Time{}
+			return &adapted, nil
+		default:
+			return wm, nil
 		}
 	}
 
@@ -435,7 +456,6 @@ func handleLockedUserWithLockoutPolicy(ctx context.Context, wm HumanPasswordChec
 		FailedAttempts: int32(wm.GetPasswordCheckFailedCount()),
 	}
 	return wm, zerrors.ThrowPreconditionFailed(wrongPasswordError, "COMMAND-JLK35", "Errors.User.Locked")
-
 }
 
 func verifyPasswordWithLockoutPolicy(
