@@ -300,13 +300,14 @@ export async function sendPassword(
           };
         }
 
-        if( "remainingLockDuration" in error && error.remainingLockDuration) {
+        if ("remainingLockDuration" in error && error.remainingLockDuration) {
           recordAuthFailure("password", "account_locked", command.organization);
           if (lockoutSettings?.showAbsoluteLockoutTime) {
-            return { error: t("errors.accountLockedAbsolute", {
-              lockDuration: error.remainingLockDuration,
-            }),
-            }
+            return {
+              error: t("errors.accountLockedAbsolute", {
+                lockDuration: error.remainingLockDuration,
+              }),
+            };
           }
           return {
             error: t("errors.accountLocked", {

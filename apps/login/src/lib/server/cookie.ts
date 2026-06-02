@@ -32,7 +32,7 @@ type CustomCookieData = {
 
 const passwordAttemptsAndSuspensionHandler = (error: ConnectError) => {
   const details = error.findDetails(CredentialsCheckErrorSchema);
-  
+
   if (details[0] && "failedAttempts" in details[0] && details[0].failedAttempts > 0) {
     const failedAttempts = details[0].failedAttempts;
     throw {
