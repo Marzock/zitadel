@@ -419,6 +419,7 @@ func lockoutPolicyToDomain(policy *query.LockoutPolicy) *domain.LockoutPolicy {
 		AutoUnlockAfterMin:       policy.AutoUnlockAfterMin,
 		ShowLockOutFailures:      policy.ShowFailures,
 		ShowRemainingLockoutTime: policy.ShowRemainingLockoutTime,
+		ShowAbsoluteLockoutTime:  policy.ShowAbsoluteLockoutTime,
 	}
 }
 

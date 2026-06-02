@@ -180,6 +180,7 @@ func lockoutSettingsToPb(current *query.LockoutPolicy) *settings.LockoutSettings
 		ResourceOwnerType:        isDefaultToResourceOwnerTypePb(current.IsDefault),
 		AutoUnlockAfterMin:       current.AutoUnlockAfterMin,
 		ShowRemainingLockoutTime: current.ShowRemainingLockoutTime,
+		ShowAbsoluteLockoutTime:  current.ShowAbsoluteLockoutTime,
 	}
 }
 

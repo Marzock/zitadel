@@ -1896,6 +1896,7 @@
       "MAXPASSWORDATTEMPTS": "Maximale Anzahl an Passwort Versuchen",
       "AUTOUNLOCKAFTERMIN": "Automatische Entsperrung nach (in Minuten)",
       "SHOWREMAININGLOCKOUTTIME": "Verbleibende Sperrzeit anzeigen",
+      "SHOWABSOLUTELOCKOUTTIME": "Absolutes Sperrzeitende anzeigen",
       "MAXOTPATTEMPTS": "Maximale Anzahl an OTP Versuchen",
       "EXPIREWARNDAYS": "Ablauf Warnung nach Tagen",
       "MAXAGEDAYS": "Maximale Gültigkeit in Tagen",

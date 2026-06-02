@@ -48,6 +48,7 @@ func TestCommandSide_AddPasswordLockoutPolicy(t *testing.T) {
 					ShowLockOutFailures:      true,
 					AutoUnlockAfterMin:       10,
 					ShowRemainingLockoutTime: true,
+					ShowAbsoluteLockoutTime:  true,
 				},
 			},
 			res: res{
@@ -68,6 +69,7 @@ func TestCommandSide_AddPasswordLockoutPolicy(t *testing.T) {
 								true,
 								10,
 								true,
+								true,
 							),
 						),
 					),
@@ -82,6 +84,7 @@ func TestCommandSide_AddPasswordLockoutPolicy(t *testing.T) {
 					ShowLockOutFailures:      true,
 					AutoUnlockAfterMin:       10,
 					ShowRemainingLockoutTime: true,
+					ShowAbsoluteLockoutTime:  true,
 				},
 			},
 			res: res{
@@ -102,6 +105,7 @@ func TestCommandSide_AddPasswordLockoutPolicy(t *testing.T) {
 							true,
 							10,
 							true,
+							true,
 						),
 					),
 				),
@@ -115,6 +119,7 @@ func TestCommandSide_AddPasswordLockoutPolicy(t *testing.T) {
 					ShowLockOutFailures:      true,
 					AutoUnlockAfterMin:       10,
 					ShowRemainingLockoutTime: true,
+					ShowAbsoluteLockoutTime:  true,
 				},
 			},
 			res: res{
@@ -128,6 +133,7 @@ func TestCommandSide_AddPasswordLockoutPolicy(t *testing.T) {
 					ShowLockOutFailures:      true,
 					AutoUnlockAfterMin:       10,
 					ShowRemainingLockoutTime: true,
+					ShowAbsoluteLockoutTime:  true,
 				},
 			},
 		},
@@ -185,6 +191,7 @@ func TestCommandSide_ChangePasswordLockoutPolicy(t *testing.T) {
 					ShowLockOutFailures:      true,
 					AutoUnlockAfterMin:       10,
 					ShowRemainingLockoutTime: true,
+					ShowAbsoluteLockoutTime:  true,
 				},
 			},
 			res: res{
@@ -208,6 +215,7 @@ func TestCommandSide_ChangePasswordLockoutPolicy(t *testing.T) {
 					ShowLockOutFailures:      true,
 					AutoUnlockAfterMin:       10,
 					ShowRemainingLockoutTime: true,
+					ShowAbsoluteLockoutTime:  true,
 				},
 			},
 			res: res{
@@ -228,6 +236,7 @@ func TestCommandSide_ChangePasswordLockoutPolicy(t *testing.T) {
 								true,
 								10,
 								true,
+								true,
 							),
 						),
 					),
@@ -242,6 +251,7 @@ func TestCommandSide_ChangePasswordLockoutPolicy(t *testing.T) {
 					ShowLockOutFailures:      true,
 					AutoUnlockAfterMin:       10,
 					ShowRemainingLockoutTime: true,
+					ShowAbsoluteLockoutTime:  true,
 				},
 			},
 			res: res{
@@ -262,11 +272,12 @@ func TestCommandSide_ChangePasswordLockoutPolicy(t *testing.T) {
 								true,
 								10,
 								true,
+								true,
 							),
 						),
 					),
 					expectPush(
-						newPasswordLockoutPolicyChangedEvent(context.Background(), "org1", 5, 5, false, 5, false),
+						newPasswordLockoutPolicyChangedEvent(context.Background(), "org1", 5, 5, false, 5, false, false),
 					),
 				),
 			},
@@ -279,6 +290,7 @@ func TestCommandSide_ChangePasswordLockoutPolicy(t *testing.T) {
 					ShowLockOutFailures:      false,
 					AutoUnlockAfterMin:       5,
 					ShowRemainingLockoutTime: false,
+					ShowAbsoluteLockoutTime:  false,
 				},
 			},
 			res: res{
@@ -292,6 +304,7 @@ func TestCommandSide_ChangePasswordLockoutPolicy(t *testing.T) {
 					ShowLockOutFailures:      false,
 					AutoUnlockAfterMin:       5,
 					ShowRemainingLockoutTime: false,
+					ShowAbsoluteLockoutTime:  false,
 				},
 			},
 		},
@@ -377,6 +390,7 @@ func TestCommandSide_RemovePasswordLockoutPolicy(t *testing.T) {
 								true,
 								10,
 								true,
+								true,
 							),
 						),
 					),
@@ -413,7 +427,7 @@ func TestCommandSide_RemovePasswordLockoutPolicy(t *testing.T) {
 	}
 }
 
-func newPasswordLockoutPolicyChangedEvent(ctx context.Context, orgID string, maxPasswordAttempts, maxOTPAttempts uint64, showLockoutFailure bool, autoUnlockAfterMin uint64, showRemainingLockoutTime bool) *org.LockoutPolicyChangedEvent {
+func newPasswordLockoutPolicyChangedEvent(ctx context.Context, orgID string, maxPasswordAttempts, maxOTPAttempts uint64, showLockoutFailure bool, autoUnlockAfterMin uint64, showRemainingLockoutTime bool, showAbsoluteLockoutTime bool) *org.LockoutPolicyChangedEvent {
 	event, _ := org.NewLockoutPolicyChangedEvent(ctx,
 		&org.NewAggregate(orgID).Aggregate,
 		[]policy.LockoutPolicyChanges{
@@ -422,6 +436,7 @@ func newPasswordLockoutPolicyChangedEvent(ctx context.Context, orgID string, max
 			policy.ChangeShowLockOutFailures(showLockoutFailure),
 			policy.ChangeAutoUnlockAfterMin(autoUnlockAfterMin),
 			policy.ChangeShowRemainingLockoutTime(showRemainingLockoutTime),
+			policy.ChangeShowAbsoluteLockoutTime(showAbsoluteLockoutTime),
 		},
 	)
 	return event

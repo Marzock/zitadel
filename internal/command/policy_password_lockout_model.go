@@ -14,6 +14,7 @@ type LockoutPolicyWriteModel struct {
 	ShowLockOutFailures      bool
 	AutoUnlockAfterMin       uint64
 	ShowRemainingLockoutTime bool
+	ShowAbsoluteLockoutTime  bool
 	State                    domain.PolicyState
 }
 
@@ -26,6 +27,7 @@ func (wm *LockoutPolicyWriteModel) Reduce() error {
 			wm.ShowLockOutFailures = e.ShowLockOutFailures
 			wm.AutoUnlockAfterMin = e.AutoUnlockAfterMin
 			wm.ShowRemainingLockoutTime = e.ShowRemainingLockoutTime
+			wm.ShowAbsoluteLockoutTime = e.ShowAbsoluteLockoutTime
 			wm.State = domain.PolicyStateActive
 		case *policy.LockoutPolicyChangedEvent:
 			if e.MaxPasswordAttempts != nil {
@@ -42,6 +44,9 @@ func (wm *LockoutPolicyWriteModel) Reduce() error {
 			}
 			if e.ShowRemainingLockoutTime != nil {
 				wm.ShowRemainingLockoutTime = *e.ShowRemainingLockoutTime
+			}
+			if e.ShowAbsoluteLockoutTime != nil {
+				wm.ShowAbsoluteLockoutTime = *e.ShowAbsoluteLockoutTime
 			}
 		case *policy.LockoutPolicyRemovedEvent:
 			wm.State = domain.PolicyStateRemoved

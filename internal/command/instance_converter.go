@@ -113,6 +113,7 @@ func writeModelToLockoutPolicy(wm *LockoutPolicyWriteModel) *domain.LockoutPolic
 		ShowLockOutFailures:      wm.ShowLockOutFailures,
 		AutoUnlockAfterMin:       wm.AutoUnlockAfterMin,
 		ShowRemainingLockoutTime: wm.ShowRemainingLockoutTime,
+		ShowAbsoluteLockoutTime:  wm.ShowAbsoluteLockoutTime,
 	}
 }
 

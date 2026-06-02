@@ -2435,6 +2435,7 @@ func TestGetLockoutSettings(t *testing.T) {
 				ShowLockOutFailures:      gu.Ptr(true),
 				AutoUnlockAfterMin:       gu.Ptr(uint64(3)),
 				ShowRemainingLockoutTime: gu.Ptr(true),
+				ShowAbsoluteLockoutTime:  gu.Ptr(true),
 			},
 		},
 		{
@@ -2448,6 +2449,7 @@ func TestGetLockoutSettings(t *testing.T) {
 				ShowLockOutFailures:      gu.Ptr(true),
 				AutoUnlockAfterMin:       gu.Ptr(uint64(4)),
 				ShowRemainingLockoutTime: gu.Ptr(true),
+				ShowAbsoluteLockoutTime:  gu.Ptr(true),
 			},
 		},
 		{
@@ -2461,6 +2463,7 @@ func TestGetLockoutSettings(t *testing.T) {
 				ShowLockOutFailures:      gu.Ptr(false),
 				AutoUnlockAfterMin:       gu.Ptr(uint64(5)),
 				ShowRemainingLockoutTime: gu.Ptr(true),
+				ShowAbsoluteLockoutTime:  gu.Ptr(true),
 			},
 		},
 		{
@@ -2474,6 +2477,7 @@ func TestGetLockoutSettings(t *testing.T) {
 				ShowLockOutFailures:      gu.Ptr(true),
 				AutoUnlockAfterMin:       gu.Ptr(uint64(6)),
 				ShowRemainingLockoutTime: gu.Ptr(true),
+				ShowAbsoluteLockoutTime:  gu.Ptr(true),
 			},
 		},
 	}
@@ -2546,6 +2550,7 @@ func TestListLockoutSettings(t *testing.T) {
 				ShowLockOutFailures:      gu.Ptr(true),
 				AutoUnlockAfterMin:       gu.Ptr(uint64(3)),
 				ShowRemainingLockoutTime: gu.Ptr(true),
+				ShowAbsoluteLockoutTime:  gu.Ptr(true),
 			},
 		},
 		{
@@ -2559,6 +2564,7 @@ func TestListLockoutSettings(t *testing.T) {
 				ShowLockOutFailures:      gu.Ptr(false),
 				AutoUnlockAfterMin:       gu.Ptr(uint64(4)),
 				ShowRemainingLockoutTime: gu.Ptr(false),
+				ShowAbsoluteLockoutTime:  gu.Ptr(false),
 			},
 		},
 		{
@@ -2572,6 +2578,7 @@ func TestListLockoutSettings(t *testing.T) {
 				ShowLockOutFailures:      gu.Ptr(true),
 				AutoUnlockAfterMin:       gu.Ptr(uint64(5)),
 				ShowRemainingLockoutTime: gu.Ptr(true),
+				ShowAbsoluteLockoutTime:  gu.Ptr(true),
 			},
 		},
 		{
@@ -2585,6 +2592,7 @@ func TestListLockoutSettings(t *testing.T) {
 				ShowLockOutFailures:      gu.Ptr(true),
 				AutoUnlockAfterMin:       gu.Ptr(uint64(6)),
 				ShowRemainingLockoutTime: gu.Ptr(true),
+				ShowAbsoluteLockoutTime:  gu.Ptr(true),
 			},
 		},
 	}
@@ -2664,6 +2672,7 @@ func TestSetLockoutSettings(t *testing.T) {
 			ShowLockOutFailures:      gu.Ptr(true),
 			AutoUnlockAfterMin:       gu.Ptr(uint64(3)),
 			ShowRemainingLockoutTime: gu.Ptr(true),
+			ShowAbsoluteLockoutTime:  gu.Ptr(true),
 		},
 	}
 
@@ -2688,6 +2697,7 @@ func TestSetLockoutSettings(t *testing.T) {
 					ShowLockOutFailures:      gu.Ptr(true),
 					AutoUnlockAfterMin:       gu.Ptr(uint64(4)),
 					ShowRemainingLockoutTime: gu.Ptr(true),
+					ShowAbsoluteLockoutTime:  gu.Ptr(true),
 				},
 			},
 		},
@@ -2704,6 +2714,7 @@ func TestSetLockoutSettings(t *testing.T) {
 					ShowLockOutFailures:      gu.Ptr(true),
 					AutoUnlockAfterMin:       gu.Ptr(uint64(5)),
 					ShowRemainingLockoutTime: gu.Ptr(true),
+					ShowAbsoluteLockoutTime:  gu.Ptr(true),
 				},
 			},
 		},
@@ -2720,6 +2731,7 @@ func TestSetLockoutSettings(t *testing.T) {
 					ShowLockOutFailures:      gu.Ptr(true),
 					AutoUnlockAfterMin:       gu.Ptr(uint64(3)),
 					ShowRemainingLockoutTime: gu.Ptr(true),
+					ShowAbsoluteLockoutTime:  gu.Ptr(true),
 				},
 			},
 			wantErr: new(database.ForeignKeyError),
@@ -2737,6 +2749,7 @@ func TestSetLockoutSettings(t *testing.T) {
 					ShowLockOutFailures:      gu.Ptr(true),
 					AutoUnlockAfterMin:       gu.Ptr(uint64(3)),
 					ShowRemainingLockoutTime: gu.Ptr(true),
+					ShowAbsoluteLockoutTime:  gu.Ptr(true),
 				},
 			},
 			wantErr: new(database.ForeignKeyError),
@@ -2776,6 +2789,7 @@ func TestDeleteLockoutSettings(t *testing.T) {
 			ShowLockOutFailures:      gu.Ptr(true),
 			AutoUnlockAfterMin:       gu.Ptr(uint64(3)),
 			ShowRemainingLockoutTime: gu.Ptr(true),
+			ShowAbsoluteLockoutTime:  gu.Ptr(true),
 		},
 	}
 	err := repo.Set(t.Context(), tx, existingInstanceSettings)
@@ -2792,6 +2806,7 @@ func TestDeleteLockoutSettings(t *testing.T) {
 			ShowLockOutFailures:      gu.Ptr(true),
 			AutoUnlockAfterMin:       gu.Ptr(uint64(4)),
 			ShowRemainingLockoutTime: gu.Ptr(true),
+			ShowAbsoluteLockoutTime:  gu.Ptr(true),
 		},
 	}
 	err = repo.Set(t.Context(), tx, existingOrganizationSettings)

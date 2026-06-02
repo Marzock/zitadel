@@ -420,6 +420,12 @@ func evaluateLockoutPolicy(
 			}
 			return false, zerrors.ThrowPreconditionFailed(lockDurationNotExceededError, "COMMAND-M4rp6", "Errors.User.LockDurationNotExceeded")
 		}
+		if lockoutPolicy.ShowAbsoluteLockoutTime {
+			lockDurationNotExceededError := &commandErrors.LockDurationNotExceededError{
+				RemainingTime: int32(lockoutPolicy.AutoUnlockAfterMin),
+			}
+			return false, zerrors.ThrowPreconditionFailed(lockDurationNotExceededError, "COMMAND-M4rp6", "Errors.User.LockDurationNotExceeded")
+		}
 	}
 	return false, nil
 }

@@ -143,6 +143,7 @@
       "failedToAuthenticateNoLimit": "Échec de l'authentification.",
       "accountLockedContactAdmin": " Contactez votre administrateur pour déverrouiller votre compte",
       "accountLocked": "Le compte est verrouillé. Durée restante du verrouillage : {remainingLockDuration} minutes",
+      "accountLockedAbsolute": "Le compte est verrouillé. Durée du verrouillage : {lockDuration} minutes.",
       "userNotFound": "Utilisateur non trouvé dans le système",
       "initialUserNotSupported": "Utilisateur initial non pris en charge",
       "userInitialStateNotSupported": "État initial de l'utilisateur non pris en charge",

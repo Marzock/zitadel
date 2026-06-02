@@ -19,6 +19,7 @@ type LockoutPolicyAddedEvent struct {
 	ShowLockOutFailures      bool   `json:"showLockOutFailures,omitempty"`
 	AutoUnlockAfterMin       uint64 `json:"autoUnlockAfterMin,omitempty"`
 	ShowRemainingLockoutTime bool   `json:"showRemainingLockoutTime,omitempty"`
+	ShowAbsoluteLockoutTime  bool   `json:"showAbsoluteLockoutTime,omitempty"`
 }
 
 func (e *LockoutPolicyAddedEvent) Payload() interface{} {
@@ -36,6 +37,7 @@ func NewLockoutPolicyAddedEvent(
 	showLockOutFailures bool,
 	autoUnlockAfterMin uint64,
 	showRemainingLockoutTime bool,
+	showAbsoluteLockoutTime bool,
 ) *LockoutPolicyAddedEvent {
 
 	return &LockoutPolicyAddedEvent{
@@ -45,6 +47,7 @@ func NewLockoutPolicyAddedEvent(
 		ShowLockOutFailures:      showLockOutFailures,
 		AutoUnlockAfterMin:       autoUnlockAfterMin,
 		ShowRemainingLockoutTime: showRemainingLockoutTime,
+		ShowAbsoluteLockoutTime:  showAbsoluteLockoutTime,
 	}
 }
 
@@ -69,6 +72,7 @@ type LockoutPolicyChangedEvent struct {
 	ShowLockOutFailures      *bool   `json:"showLockOutFailures,omitempty"`
 	AutoUnlockAfterMin       *uint64 `json:"autoUnlockAfterMin,omitempty"`
 	ShowRemainingLockoutTime *bool   `json:"showRemainingLockoutTime,omitempty"`
+	ShowAbsoluteLockoutTime  *bool   `json:"showAbsoluteLockoutTime,omitempty"`
 }
 
 func (e *LockoutPolicyChangedEvent) Payload() interface{} {
@@ -124,6 +128,12 @@ func ChangeAutoUnlockAfterMin(autoUnlockAfterMin uint64) func(*LockoutPolicyChan
 func ChangeShowRemainingLockoutTime(showRemainingLockoutTime bool) func(*LockoutPolicyChangedEvent) {
 	return func(e *LockoutPolicyChangedEvent) {
 		e.ShowRemainingLockoutTime = &showRemainingLockoutTime
+	}
+}
+
+func ChangeShowAbsoluteLockoutTime(showAbsoluteLockoutTime bool) func(*LockoutPolicyChangedEvent) {
+	return func(e *LockoutPolicyChangedEvent) {
+		e.ShowAbsoluteLockoutTime = &showAbsoluteLockoutTime
 	}
 }
 

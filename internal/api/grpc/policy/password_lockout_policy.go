@@ -13,6 +13,7 @@ func ModelLockoutPolicyToPb(policy *query.LockoutPolicy) *policy_pb.LockoutPolic
 		MaxOtpAttempts:           policy.MaxOTPAttempts,
 		AutoUnlockAfterMin:       policy.AutoUnlockAfterMin,
 		ShowRemainingLockoutTime: policy.ShowRemainingLockoutTime,
+		ShowAbsoluteLockoutTime:  policy.ShowAbsoluteLockoutTime,
 		Details: object.ToViewDetailsPb(
 			policy.Sequence,
 			policy.CreationDate,

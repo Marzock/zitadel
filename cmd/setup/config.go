@@ -187,6 +187,7 @@ type Steps struct {
 	s69CacheTablesLogged                           *CacheTablesLogged
 	s70LockoutPolicyAutoUnlockColumn               *LockoutPolicyAutoUnlockColumn
 	s71LockoutPolicyShowRemainingLockoutTimeColumn *LockoutPolicyShowRemainingLockoutTimeColumn
+	s72LockoutPolicyShowAbsoluteLockoutTimeColumn  *LockoutPolicyShowAbsoluteLockoutTimeColumn
 	RelationalTables                               *TransactionalTables
 }
 

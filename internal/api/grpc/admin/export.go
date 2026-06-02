@@ -503,6 +503,7 @@ func (s *Server) getLockoutPolicy(ctx context.Context, orgID string) (_ *managem
 			MaxOtpAttempts:           uint32(queriedLockout.MaxOTPAttempts),
 			AutoUnlockAfterMin:       uint32(queriedLockout.AutoUnlockAfterMin),
 			ShowRemainingLockoutTime: queriedLockout.ShowRemainingLockoutTime,
+			ShowAbsoluteLockoutTime:  queriedLockout.ShowAbsoluteLockoutTime,
 		}, nil
 	}
 	return nil, nil

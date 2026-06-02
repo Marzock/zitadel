@@ -30,6 +30,7 @@ type LockoutPolicy struct {
 	ShowFailures             bool
 	AutoUnlockAfterMin       uint64
 	ShowRemainingLockoutTime bool
+	ShowAbsoluteLockoutTime  bool
 
 	IsDefault bool
 }
@@ -81,6 +82,10 @@ var (
 	}
 	LockoutColShowRemainingLockoutTime = Column{
 		name:  projection.LockoutPolicyShowRemainingLockoutTimeCol,
+		table: lockoutTable,
+	}
+	LockoutColShowAbsoluteLockoutTime = Column{
+		name:  projection.LockoutPolicyShowAbsoluteLockoutTimeCol,
 		table: lockoutTable,
 	}
 	LockoutColIsDefault = Column{
@@ -165,6 +170,7 @@ func prepareLockoutPolicyQuery() (sq.SelectBuilder, func(*sql.Row) (*LockoutPoli
 			LockoutColState.identifier(),
 			LockoutColAutoUnlockAfterMin.identifier(),
 			LockoutColShowRemainingLockoutTime.identifier(),
+			LockoutColShowAbsoluteLockoutTime.identifier(),
 		).
 			From(lockoutTable.identifier()).
 			PlaceholderFormat(sq.Dollar),
@@ -183,6 +189,7 @@ func prepareLockoutPolicyQuery() (sq.SelectBuilder, func(*sql.Row) (*LockoutPoli
 				&policy.State,
 				&policy.AutoUnlockAfterMin,
 				&policy.ShowRemainingLockoutTime,
+				&policy.ShowAbsoluteLockoutTime,
 			)
 			if err != nil {
 				if errors.Is(err, sql.ErrNoRows) {

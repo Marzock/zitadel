@@ -132,7 +132,7 @@ export class PasswordLockoutPolicyComponent implements OnInit {
     if (this.lockoutData) {
       if (this.service instanceof AdminService) {
         this.service
-          .updateLockoutPolicy(this.lockoutData.maxPasswordAttempts, this.lockoutData.maxOtpAttempts, this.lockoutData.autoUnlockAfterMin, this.lockoutData.showRemainingLockoutTime)
+          .updateLockoutPolicy(this.lockoutData.maxPasswordAttempts, this.lockoutData.maxOtpAttempts, this.lockoutData.autoUnlockAfterMin, this.lockoutData.showRemainingLockoutTime, this.lockoutData.showAbsoluteLockoutTime)
           .then(() => {
             this.toast.showInfo('POLICY.TOAST.SET', true);
             this.fetchData();
@@ -143,7 +143,7 @@ export class PasswordLockoutPolicyComponent implements OnInit {
       } else {
         if ((this.lockoutData as LockoutPolicy.AsObject).isDefault) {
           (this.service as ManagementService)
-            .addCustomLockoutPolicy(this.lockoutData.maxPasswordAttempts, this.lockoutData.maxOtpAttempts, this.lockoutData.autoUnlockAfterMin, this.lockoutData.showRemainingLockoutTime)
+            .addCustomLockoutPolicy(this.lockoutData.maxPasswordAttempts, this.lockoutData.maxOtpAttempts, this.lockoutData.autoUnlockAfterMin, this.lockoutData.showRemainingLockoutTime, this.lockoutData.showAbsoluteLockoutTime)
             .then(() => {
               this.toast.showInfo('POLICY.TOAST.SET', true);
               this.fetchData();
@@ -153,7 +153,7 @@ export class PasswordLockoutPolicyComponent implements OnInit {
             });
         } else {
           (this.service as ManagementService)
-            .updateCustomLockoutPolicy(this.lockoutData.maxPasswordAttempts, this.lockoutData.maxOtpAttempts, this.lockoutData.autoUnlockAfterMin, this.lockoutData.showRemainingLockoutTime)
+            .updateCustomLockoutPolicy(this.lockoutData.maxPasswordAttempts, this.lockoutData.maxOtpAttempts, this.lockoutData.autoUnlockAfterMin, this.lockoutData.showRemainingLockoutTime, this.lockoutData.showAbsoluteLockoutTime)
             .then(() => {
               this.toast.showInfo('POLICY.TOAST.SET', true);
               this.fetchData();

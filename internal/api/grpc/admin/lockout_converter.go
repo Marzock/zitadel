@@ -11,5 +11,6 @@ func UpdateLockoutPolicyToDomain(p *admin.UpdateLockoutPolicyRequest) *domain.Lo
 		MaxOTPAttempts:           uint64(p.MaxOtpAttempts),
 		AutoUnlockAfterMin:       uint64(p.AutoUnlockAfterMin),
 		ShowRemainingLockoutTime: bool(p.ShowRemainingLockoutTime),
+		ShowAbsoluteLockoutTime:  bool(p.ShowAbsoluteLockoutTime),
 	}
 }

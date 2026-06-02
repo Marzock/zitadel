@@ -1048,13 +1048,15 @@ export class AdminService {
     maxPasswordAttempts: number,
     maxOTPAttempts: number,
     autoUnlockAfterMin: number,
-    showRemainingLockoutTime: boolean
+    showRemainingLockoutTime: boolean,
+    showAbsoluteLockoutTime: boolean,
   ): Promise<UpdateLockoutPolicyResponse.AsObject> {
     const req = new UpdateLockoutPolicyRequest();
     req.setMaxPasswordAttempts(maxPasswordAttempts);
     req.setMaxOtpAttempts(maxOTPAttempts);
     req.setAutoUnlockAfterMin(autoUnlockAfterMin);
     req.setShowRemainingLockoutTime(showRemainingLockoutTime);
+    req.setShowAbsoluteLockoutTime(showAbsoluteLockoutTime);
 
     return this.grpcService.admin.updateLockoutPolicy(req, null).then((resp) => resp.toObject());
   }

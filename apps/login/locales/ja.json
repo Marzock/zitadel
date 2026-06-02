@@ -128,6 +128,7 @@
       "failedToAuthenticateNoLimit": "認証に失敗しました。",
       "accountLockedContactAdmin": " アカウントのロックを解除するには管理者に連絡してください",
       "accountLocked": "アカウントがロックされています。ロックの残り時間：{remainingLockDuration} 分",
+      "accountLockedAbsolute": "アカウントはロックされています。ロック時間: {lockDuration} 分。",
       "userNotFound": "ユーザーがシステムに見つかりません",
       "initialUserNotSupported": "初期ユーザーはサポートされていません",
       "userInitialStateNotSupported": "ユーザーの初期状態はサポートされていません",

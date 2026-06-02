@@ -13,4 +13,5 @@ type LockoutPolicy struct {
 	ShowLockOutFailures      bool
 	AutoUnlockAfterMin       uint64
 	ShowRemainingLockoutTime bool
+	ShowAbsoluteLockoutTime  bool
 }

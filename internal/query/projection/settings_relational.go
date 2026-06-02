@@ -1029,6 +1029,7 @@ func (p *relationalTablesProjection) reduceLockoutPolicyAdded(event eventstore.E
 				ShowLockOutFailures:      &policyEvent.ShowLockOutFailures,
 				AutoUnlockAfterMin:       &policyEvent.AutoUnlockAfterMin,
 				ShowRemainingLockoutTime: &policyEvent.ShowRemainingLockoutTime,
+				ShowAbsoluteLockoutTime:  &policyEvent.ShowAbsoluteLockoutTime,
 			},
 		}
 		return settingsRepo.Set(ctx, v3_sql.SQLTx(tx), &settings)
@@ -1068,6 +1069,7 @@ func (p *relationalTablesProjection) reduceLockoutPolicyChanged(event eventstore
 				ShowLockOutFailures:      policyEvent.ShowLockOutFailures,
 				AutoUnlockAfterMin:       policyEvent.AutoUnlockAfterMin,
 				ShowRemainingLockoutTime: policyEvent.ShowRemainingLockoutTime,
+				ShowAbsoluteLockoutTime:  policyEvent.ShowAbsoluteLockoutTime,
 			},
 		}
 		return settingsRepo.Set(ctx, v3_sql.SQLTx(tx), &settings)

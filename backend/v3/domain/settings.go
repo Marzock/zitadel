@@ -312,6 +312,7 @@ type LockoutSettingsAttributes struct {
 	ShowLockOutFailures      *bool   `json:"showLockOutFailures,omitempty"`
 	AutoUnlockAfterMin       *uint64 `json:"autoUnlockAfterMin,omitempty"`
 	ShowRemainingLockoutTime *bool   `json:"showRemainingLockoutTime,omitempty"`
+	ShowAbsoluteLockoutTime  *bool   `json:"showAbsoluteLockoutTime,omitempty"`
 }
 
 //go:generate mockgen -typed -package domainmock -destination ./mock/lockout_settings.mock.go . LockoutSettingsRepository
