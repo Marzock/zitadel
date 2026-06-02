@@ -12,6 +12,7 @@ import (
 	"go.uber.org/mock/gomock"
 	"golang.org/x/text/language"
 
+	commandErrors "github.com/zitadel/zitadel/internal/command/errors"
 	"github.com/zitadel/zitadel/internal/crypto"
 	"github.com/zitadel/zitadel/internal/domain"
 	"github.com/zitadel/zitadel/internal/eventstore"
@@ -2017,6 +2018,174 @@ func TestCommandSide_CheckPassword(t *testing.T) {
 				password:      "password",
 			},
 			res: res{},
+		},
+		{
+			name: "user locked, lock duration not exceeded, showRemainingLockoutTime false, precondition error",
+			fields: fields{
+				eventstore: expectEventstore(
+					expectFilter(
+						eventFromEventPusher(
+							org.NewLoginPolicyAddedEvent(context.Background(),
+								&org.NewAggregate("org1").Aggregate,
+								true,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								domain.PasswordlessTypeNotAllowed,
+								"",
+								time.Hour*1,
+								time.Hour*2,
+								time.Hour*3,
+								time.Hour*4,
+								time.Hour*5,
+							),
+						),
+					),
+					expectFilter(
+						eventFromEventPusher(
+							user.NewHumanAddedEvent(context.Background(),
+								&user.NewAggregate("user1", "org1").Aggregate,
+								"username",
+								"firstname",
+								"lastname",
+								"nickname",
+								"displayname",
+								language.German,
+								domain.GenderUnspecified,
+								"email@test.ch",
+								true,
+							),
+						),
+						// Lock event with current time so the lock duration has not yet been exceeded.
+						eventFromEventPusherWithCreationDateNow(
+							user.NewUserLockedEvent(context.Background(),
+								&user.NewAggregate("user1", "org1").Aggregate,
+							),
+						),
+					),
+					// Org lockout policy: AutoUnlockAfterMin=60, ShowRemainingLockoutTime=false
+					expectFilter(
+						eventFromEventPusher(
+							org.NewLockoutPolicyAddedEvent(context.Background(),
+								&org.NewAggregate("org1").Aggregate,
+								5,
+								0,
+								false,
+								60,
+								false,
+							),
+						),
+					),
+				),
+				userPasswordHasher: mockPasswordHasher("x"),
+				tarpit:             expectTarpit(0),
+			},
+			args: args{
+				ctx:           context.Background(),
+				userID:        "user1",
+				resourceOwner: "org1",
+				password:      "password",
+			},
+			res: res{
+				err: func(err error) bool {
+					if !zerrors.IsPreconditionFailed(err) {
+						return false
+					}
+					// Without showRemainingLockoutTime the error must NOT carry a LockDurationNotExceededError.
+					var lockDurErr *commandErrors.LockDurationNotExceededError
+					return !errors.As(err, &lockDurErr)
+				},
+			},
+		},
+		{
+			name: "user locked, lock duration not exceeded, showRemainingLockoutTime true, lockDurationNotExceeded error",
+			fields: fields{
+				eventstore: expectEventstore(
+					expectFilter(
+						eventFromEventPusher(
+							org.NewLoginPolicyAddedEvent(context.Background(),
+								&org.NewAggregate("org1").Aggregate,
+								true,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								domain.PasswordlessTypeNotAllowed,
+								"",
+								time.Hour*1,
+								time.Hour*2,
+								time.Hour*3,
+								time.Hour*4,
+								time.Hour*5,
+							),
+						),
+					),
+					expectFilter(
+						eventFromEventPusher(
+							user.NewHumanAddedEvent(context.Background(),
+								&user.NewAggregate("user1", "org1").Aggregate,
+								"username",
+								"firstname",
+								"lastname",
+								"nickname",
+								"displayname",
+								language.German,
+								domain.GenderUnspecified,
+								"email@test.ch",
+								true,
+							),
+						),
+						// Lock event with current time so the lock duration has not yet been exceeded.
+						eventFromEventPusherWithCreationDateNow(
+							user.NewUserLockedEvent(context.Background(),
+								&user.NewAggregate("user1", "org1").Aggregate,
+							),
+						),
+					),
+					// Org lockout policy: AutoUnlockAfterMin=60, ShowRemainingLockoutTime=true
+					expectFilter(
+						eventFromEventPusher(
+							org.NewLockoutPolicyAddedEvent(context.Background(),
+								&org.NewAggregate("org1").Aggregate,
+								5,
+								0,
+								false,
+								60,
+								true,
+							),
+						),
+					),
+				),
+				userPasswordHasher: mockPasswordHasher("x"),
+				tarpit:             expectTarpit(0),
+			},
+			args: args{
+				ctx:           context.Background(),
+				userID:        "user1",
+				resourceOwner: "org1",
+				password:      "password",
+			},
+			res: res{
+				err: func(err error) bool {
+					if !zerrors.IsPreconditionFailed(err) {
+						return false
+					}
+					// With showRemainingLockoutTime the error must carry a LockDurationNotExceededError.
+					var lockDurErr *commandErrors.LockDurationNotExceededError
+					return errors.As(err, &lockDurErr)
+				},
+			},
 		},
 		{
 			name: "existing password empty, precondition error",

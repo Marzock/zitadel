@@ -853,7 +853,7 @@ func TestCheckOTPSMS(t *testing.T) {
 					expectFilter(
 						eventFromEventPusher(
 							org.NewLockoutPolicyAddedEvent(context.Background(), &org.NewAggregate("org1").Aggregate,
-								0, 0, false, 0,
+								0, 0, false, 0, false,
 							),
 						),
 					),
@@ -893,7 +893,7 @@ func TestCheckOTPSMS(t *testing.T) {
 					expectFilter(
 						eventFromEventPusher(
 							org.NewLockoutPolicyAddedEvent(context.Background(), &org.NewAggregate("org1").Aggregate,
-								0, 1, false, 0,
+								0, 1, false, 0, false,
 							),
 						),
 					),
@@ -1158,7 +1158,7 @@ func TestCheckOTPEmail(t *testing.T) {
 					expectFilter(
 						eventFromEventPusher(
 							org.NewLockoutPolicyAddedEvent(context.Background(), &org.NewAggregate("org1").Aggregate,
-								0, 0, false, 0,
+								0, 0, false, 0, false,
 							),
 						),
 					),
@@ -1199,7 +1199,7 @@ func TestCheckOTPEmail(t *testing.T) {
 					expectFilter(
 						eventFromEventPusher(
 							org.NewLockoutPolicyAddedEvent(context.Background(), &org.NewAggregate("org1").Aggregate,
-								0, 1, false, 0,
+								0, 1, false, 0, false,
 							),
 						),
 					),

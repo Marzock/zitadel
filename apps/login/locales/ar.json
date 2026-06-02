@@ -143,7 +143,7 @@
       "failedToAuthenticate": "فشلت المصادقة. لقد استهلكت {failedAttempts} من {maxPasswordAttempts} محاولة لكلمة المرور.{lockoutMessage}",
       "failedToAuthenticateNoLimit": "فشلت المصادقة.",
       "accountLockedContactAdmin": " اتصل بالمسؤول لفتح قفل حسابك",
-      "accountSuspended": "الحساب موقوف. وقت التعليق المتبقي: {remainingSuspensionTime} دقيقة",
+      "accountLocked": "الحساب مقفل. وقت القفل المتبقي: {remainingLockDuration} دقيقة",
       "userNotFound": "المستخدم غير موجود في النظام",
       "initialUserNotSupported": "المستخدم الأولي غير مدعوم",
       "userInitialStateNotSupported": "حالة المستخدم الأولية غير مدعومة",

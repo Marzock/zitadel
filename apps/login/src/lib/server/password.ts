@@ -300,11 +300,11 @@ export async function sendPassword(
           };
         }
 
-        if( "remainingSuspensionTime" in error && error.remainingSuspensionTime) {
-          recordAuthFailure("password", "account_suspended", command.organization);
+        if( "remainingLockDuration" in error && error.remainingLockDuration) {
+          recordAuthFailure("password", "account_locked", command.organization);
           return {
-            error: t("errors.accountSuspended", {
-              remainingSuspensionTime: error.remainingSuspensionTime,
+            error: t("errors.accountLocked", {
+              remainingLockDuration: error.remainingLockDuration,
             }),
           };
         }

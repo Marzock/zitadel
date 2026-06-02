@@ -142,7 +142,7 @@
       "failedToAuthenticate": "Falha na autenticação. Você usou {failedAttempts} de {maxPasswordAttempts} tentativas de senha.{lockoutMessage}",
       "failedToAuthenticateNoLimit": "Falha na autenticação.",
       "accountLockedContactAdmin": " Entre em contato com o administrador para desbloquear sua conta",
-      "accountSuspended": "A conta está suspensa. Tempo de suspensão restante: {remainingSuspensionTime} minutos",
+      "accountLocked": "A conta está bloqueada. Tempo de bloqueio restante: {remainingLockDuration} minutos",
       "userNotFound": "Usuário não encontrado no sistema",
       "initialUserNotSupported": "Usuário inicial não suportado",
       "userInitialStateNotSupported": "Estado inicial do usuário não é suportado",

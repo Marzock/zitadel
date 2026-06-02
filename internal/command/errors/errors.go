@@ -8,10 +8,10 @@ func (wpe *WrongPasswordError) Error() string {
 	return ""
 }
 
-type SuspensionNotExceededError struct {
+type LockDurationNotExceededError struct {
 	RemainingTime int32
 }
 
-func (sne *SuspensionNotExceededError) Error() string {
+func (ldne *LockDurationNotExceededError) Error() string {
 	return ""
 }

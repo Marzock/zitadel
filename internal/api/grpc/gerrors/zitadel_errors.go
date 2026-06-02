@@ -161,9 +161,9 @@ func handleCommandErrors(id, key string, err error) protoadapt.MessageV1 {
 		return &message.CredentialsCheckError{Id: id, Message: key, FailedAttempts: wpe.FailedAttempts}
 	}
 
-	var sne *commandErrors.SuspensionNotExceededError
+	var sne *commandErrors.LockDurationNotExceededError
 	if err != nil && errors.As(err, &sne) {
-		return &message.CredentialsCheckError{Id: id, Message: key, RemainingSuspensionTime: sne.RemainingTime}
+		return &message.CredentialsCheckError{Id: id, Message: key, RemainingLockDuration: sne.RemainingTime}
 	}
 	return nil
 }

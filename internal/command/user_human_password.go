@@ -423,19 +423,19 @@ func handleLockedUserWithLockoutPolicy(ctx context.Context, wm HumanPasswordChec
 			default:
 				return wm, nil
 			}
-		} else {
-			suspensionNotExceededError := &commandErrors.SuspensionNotExceededError{
+		} else if lockoutPolicy.ShowRemainingLockoutTime {
+			lockDurationNotExceededError := &commandErrors.LockDurationNotExceededError{
 				RemainingTime: int32(time.Until(wm.GetLockedAt().Add(time.Duration(lockoutPolicy.AutoUnlockAfterMin) * time.Minute)).Minutes()),
 			}
-			return wm, zerrors.ThrowPreconditionFailed(suspensionNotExceededError, "COMMAND-M4rp6", "Errors.User.SuspensionNotExceeded")
+			return wm, zerrors.ThrowPreconditionFailed(lockDurationNotExceededError, "COMMAND-M4rp6", "Errors.User.LockDurationNotExceeded")
 		}
-	} else {
-		wrongPasswordError := &commandErrors.WrongPasswordError{
-			FailedAttempts: int32(wm.GetPasswordCheckFailedCount()),
-		}
-		return wm, zerrors.ThrowPreconditionFailed(wrongPasswordError, "COMMAND-JLK35", "Errors.User.Locked")
-
 	}
+
+	wrongPasswordError := &commandErrors.WrongPasswordError{
+		FailedAttempts: int32(wm.GetPasswordCheckFailedCount()),
+	}
+	return wm, zerrors.ThrowPreconditionFailed(wrongPasswordError, "COMMAND-JLK35", "Errors.User.Locked")
+
 }
 
 func verifyPasswordWithLockoutPolicy(

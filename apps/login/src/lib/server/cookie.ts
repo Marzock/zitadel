@@ -40,11 +40,11 @@ const passwordAttemptsAndSuspensionHandler = (error: ConnectError) => {
       failedAttempts: failedAttempts,
     };
   }
-  if (details[0] && "remainingSuspensionTime" in details[0] && details[0].remainingSuspensionTime > 0) {
-    const remainingSuspensionTime = details[0].remainingSuspensionTime;
+  if (details[0] && "remainingLockDuration" in details[0] && details[0].remainingLockDuration > 0) {
+    const remainingLockDuration = details[0].remainingLockDuration;
     throw {
-      error: `Failed to authenticate: Your account is suspended. Remaining suspension time: ${remainingSuspensionTime} seconds.`,
-      remainingSuspensionTime: remainingSuspensionTime,
+      error: `Failed to authenticate: Your account is locked. Remaining lock duration: ${remainingLockDuration} seconds.`,
+      remainingLockDuration: remainingLockDuration,
     };
   }
 

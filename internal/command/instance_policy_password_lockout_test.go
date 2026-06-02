@@ -233,7 +233,7 @@ func TestCommandSide_ChangeDefaultLockoutPolicy(t *testing.T) {
 					MaxOTPAttempts:           20,
 					ShowLockOutFailures:      false,
 					AutoUnlockAfterMin:       20,
-					ShowRemainingLockoutTime: true,
+					ShowRemainingLockoutTime: false,
 				},
 			},
 		},

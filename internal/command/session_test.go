@@ -590,7 +590,7 @@ func TestCommands_updateSession(t *testing.T) {
 					),
 					expectFilter(), // recheck
 					expectFilter(
-						org.NewLockoutPolicyAddedEvent(context.Background(), &org.NewAggregate("org1").Aggregate, 0, 0, false, 0),
+						org.NewLockoutPolicyAddedEvent(context.Background(), &org.NewAggregate("org1").Aggregate, 0, 0, false, 0, false),
 					),
 					expectPush(
 						user.NewHumanPasswordCheckFailedEvent(context.Background(), &user.NewAggregate("userID", "org1").Aggregate, nil),
@@ -1186,7 +1186,7 @@ func TestCheckTOTP(t *testing.T) {
 					),
 					expectFilter(), // recheck
 					expectFilter(
-						eventFromEventPusher(org.NewLockoutPolicyAddedEvent(ctx, orgAgg, 0, 0, false, 0)),
+						eventFromEventPusher(org.NewLockoutPolicyAddedEvent(ctx, orgAgg, 0, 0, false, 0, false)),
 					),
 				),
 				tarpit: expectTarpit(1),
@@ -1217,7 +1217,7 @@ func TestCheckTOTP(t *testing.T) {
 					),
 					expectFilter(), // recheck
 					expectFilter(
-						eventFromEventPusher(org.NewLockoutPolicyAddedEvent(ctx, orgAgg, 1, 1, false, 0)),
+						eventFromEventPusher(org.NewLockoutPolicyAddedEvent(ctx, orgAgg, 1, 1, false, 0, false)),
 					),
 				),
 				tarpit: expectTarpit(1),
@@ -1391,7 +1391,7 @@ func TestCheckRecoveryCode(t *testing.T) {
 					),
 					expectFilter(), // additional lock check
 					expectFilter(
-						eventFromEventPusher(org.NewLockoutPolicyAddedEvent(ctx, orgAgg, 0, 0, false, 0)),
+						eventFromEventPusher(org.NewLockoutPolicyAddedEvent(ctx, orgAgg, 0, 0, false, 0, false)),
 					),
 				),
 				hasher: hasher,
@@ -1417,7 +1417,7 @@ func TestCheckRecoveryCode(t *testing.T) {
 					),
 					expectFilter(), // additional lock check
 					expectFilter(
-						eventFromEventPusher(org.NewLockoutPolicyAddedEvent(ctx, orgAgg, 1, 1, false, 0)),
+						eventFromEventPusher(org.NewLockoutPolicyAddedEvent(ctx, orgAgg, 1, 1, false, 0, false)),
 					),
 				),
 				hasher: hasher,
